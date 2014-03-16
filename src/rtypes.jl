@@ -167,6 +167,52 @@ result_type{T1<:Real,T2<:Real}(::ModFun, ::Type{T1}, ::Type{T2}) = promote_type(
 result_type{T1<:Signed,T2<:Unsigned}(::ModFun, ::Type{T1}, ::Type{T2}) = unsignedtype(promote_type(T1, T2))
 result_type{T1<:Unsigned,T2<:Signed}(::ModFun, ::Type{T1}, ::Type{T2}) = signedtype(promote_type(T1, T2))
 
+# logical
 
+result_type(::Not, ::Type{Bool}) = Bool
+result_type(::And, ::Type{Bool}, ::Type{Bool}) = Bool
+result_type(::Or, ::Type{Bool}, ::Type{Bool}) = Bool
 
+# bitwise
+
+result_type{T<:Integer}(::BitwiseNot, ::Type{T}) = T
+
+result_type{T1<:Integer,T2<:Integer}(::Union(BitwiseAnd,BitwiseOr,BitwiseXor), ::Type{T1}, ::Type{T2}) = 
+    promote_type(T1, T2)
+
+# rounding
+
+result_type{T<:Real}(::Union(FloorFun, CeilFun, TruncFun, RoundFun), ::Type{T}) = T
+result_type{T<:Integer}(::Union(IfloorFun, IceilFun, ItruncFun, IroundFun), ::Type{T}) = T
+result_type{T<:FloatingPoint}(::Union(IfloorFun, IceilFun, ItruncFun, IroundFun), ::Type{T}) = Int64
+
+# algebraic functions
+
+result_type{T<:Number}(::Union(SqrtFun,CbrtFun), ::Type{T}) = fptype(T)
+result_type{T1<:Real,T2<:Real}(::HypotFun, ::Type{T1}, ::Type{T2}) = promote_type(fptype(T1), fptype(T2))
+
+# exponential & logarithm
+
+result_type{T<:Number}(::Union(ExpFun,Exp2Fun,Exp10Fun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(LogFun,Log2Fun,Log10Fun), ::Type{T}) = fptype(T)
+result_type{T<:Real}(::Union(Expm1Fun,Log1pFun), ::Type{T}) = fptype(T)
+
+# trigonometric functions
+
+result_type{T<:Number}(::Union(SinFun,CosFun,TanFun,CotFun,SecFun,CscFun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(AsinFun,AcosFun,AtanFun,AcotFun,AsecFun,AcscFun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(SincFun,CoscFun,SinpiFun,CospiFun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(SindFun,CosdFun,TandFun,CotdFun,SecdFun,CscdFun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(AsindFun,AcosdFun,AtandFun,AcotdFun,AsecdFun,AcscdFun), ::Type{T}) = fptype(T)
+
+result_type{T<:Integer}(::SincFun, ::Type{T}) = T
+result_type{T<:Integer}(::SinpiFun, ::Type{T}) = T
+result_type{T<:Integer}(::CospiFun, ::Type{T}) = arithtype(T)
+
+result_type{T1<:Real,T2<:Real}(::Atan2Fun, ::Type{T1}, ::Type{T2}) = promote_type(fptype(T1), fptype(T2))
+
+# hyperbolic functions
+
+result_type{T<:Number}(::Union(SinhFun,CoshFun,TanhFun,CothFun,SechFun,CschFun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(AsinhFun,AcoshFun,AtanhFun,AcothFun,AsechFun,AcschFun), ::Type{T}) = fptype(T)
 

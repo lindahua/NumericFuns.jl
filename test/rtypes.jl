@@ -44,6 +44,7 @@ const complextypes = [Complex{Bool},
                       Complex64, 
                       Complex128]
 
+const numerictypes_r = [realtypes..., Complex64, Complex128]
 const numerictypes = [realtypes..., complextypes...]
 
 ## test fptype
@@ -87,7 +88,88 @@ for F in [DivFun, FldFun, RemFun, ModFun]
     end
 end
 
+## logical & bitwise
+
+println("    logical operators")
+
+check_rtype(Not(), Bool)
+check_rtype(And(), Bool, Bool)
+check_rtype(Or(),  Bool, Bool)
+
+println("    bitwise operators")
+
+for T in integraltypes
+    check_rtype(BitwiseNot(), T)
+end
+
+for F in [BitwiseAnd, BitwiseOr, BitwiseXor]
+    for T1 in integraltypes, T2 in integraltypes
+        check_rtype(F(), T1, T2)
+    end
+end
+
+# rounding functions
+
+println("    rounding functions")
+
+for F in [FloorFun, CeilFun, TruncFun, RoundFun, 
+          IfloorFun, IceilFun, ItruncFun, IroundFun]
+    for T in realtypes
+        check_rtype(F(), T)
+    end
+end
+
+println("    algebraic functions")
+
+for T in numerictypes
+    check_rtype(SqrtFun(), T)
+end
+
+for T in realtypes
+    check_rtype(CbrtFun(), T)
+end
+
+for T1 in realtypes, T2 in realtypes
+    check_rtype(HypotFun(), T1, T2)
+end
+
+println("    exponential & logarithm")
+
+for F in [ExpFun, Exp2Fun, Exp10Fun, 
+          LogFun, Log2Fun, Log10Fun]
+    for T in numerictypes_r
+        check_rtype(F(), T)
+    end
+end
+
+for F in [Expm1Fun, Log1pFun]
+    for T in realtypes
+        check_rtype(F(), T)
+    end
+end
+
+println("    trigonometric functions")
+
+for F in [SinFun, CosFun, TanFun, CotFun, SecFun, CscFun, 
+          AsinFun, AcosFun, AtanFun, AcotFun, AsecFun, AcscFun, 
+          SincFun, CoscFun, SinpiFun, CospiFun]
+    for T in realtypes
+        check_rtype(F(), T)
+    end
+end
+
+for T1 in realtypes, T2 in realtypes
+    check_rtype(Atan2Fun(), T1, T2)
+end
 
 
+println("    hyperbolic functions")
+
+for F in [SinhFun, CoshFun, TanhFun, CothFun, SechFun, CschFun, 
+          AsinhFun, AcoshFun, AtanhFun, AcothFun, AsechFun, AcschFun]
+    for T in realtypes
+        check_rtype(F(), T)
+    end
+end
 
 

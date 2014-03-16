@@ -157,5 +157,3 @@ for (Fun, sf) in [(ErfFun(), erf),
     @test evaluate(Fun, 1.0 + 2.0im) == sf(1.0 + 2.0im)
 end
 
-
-

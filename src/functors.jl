@@ -216,12 +216,12 @@ export AsinhFun, AcoshFun, AtanhFun, AcothFun, AsechFun, AcschFun
 @functor1a sech Number
 @functor1a csch Number
 
-@functor1a sinh Number
-@functor1a cosh Number
-@functor1a tanh Number
-@functor1a coth Number
-@functor1a sech Number
-@functor1a csch Number
+@functor1a asinh Number
+@functor1a acosh Number
+@functor1a atanh Number
+@functor1a acoth Number
+@functor1a asech Number
+@functor1a acsch Number
 
 ## special functions
 
