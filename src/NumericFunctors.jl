@@ -1,5 +1,5 @@
 module NumericFunctors
 
-# package code goes here
+    include("functors.jl")
 
 end # module
