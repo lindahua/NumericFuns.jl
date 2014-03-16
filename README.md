@@ -66,7 +66,7 @@ Here is a table of functor types for operators:
 |  GE         | ``>=`` | Real    |
 |  EQ         | ``==`` | Number  |
 |  NE         | ``!=`` | Number  |
-|-------------|--------|---------|
+
 
 
 
