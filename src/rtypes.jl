@@ -167,6 +167,16 @@ result_type{T1<:Real,T2<:Real}(::ModFun, ::Type{T1}, ::Type{T2}) = promote_type(
 result_type{T1<:Signed,T2<:Unsigned}(::ModFun, ::Type{T1}, ::Type{T2}) = unsignedtype(promote_type(T1, T2))
 result_type{T1<:Unsigned,T2<:Signed}(::ModFun, ::Type{T1}, ::Type{T2}) = signedtype(promote_type(T1, T2))
 
+# fma
+
+result_type{T1<:Number,T2<:Number,T3<:Number}(::FMA, ::Type{T1}, ::Type{T2}, ::Type{T3}) = 
+    result_type(Add(), T1, result_type(Multiply(), T2, T3))
+
+# ifelse
+
+result_type{T<:Number}(::IfelseFun, ::Type{Bool}, ::Type{T}, ::Type{T}) = T
+
+
 # logical
 
 result_type(::Not, ::Type{Bool}) = Bool

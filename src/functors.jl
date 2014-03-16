@@ -6,6 +6,10 @@
 
 abstract Functor{N}  # N is the number of arguments
 
+typealias UnaryFunctor Functor{1}
+typealias BinaryFunctor Functor{2}
+typealias TernaryFunctor Functor{3}
+
 ## macros for defining functors
 
 macro functor1(F, fun, T)
@@ -270,4 +274,21 @@ export Hankelh1Fun, Hankelh2Fun
 
 @functor1a_ord hankelh1 Number
 @functor1a_ord hankelh2 Number
+
+####################################### 
+#
+#  Ternary functors
+#
+####################################### 
+
+export FMA, IfelseFun
+
+type FMA <: Functor{3} end
+evaluate(::FMA, x::Number, y::Number, z::Number) = (x + y * z)
+
+type IfelseFun <: Functor{3} end
+evaluate{T<:Number}(::IfelseFun, c::Bool, x::T, y::T) = ifelse(c, x, y)
+
+
+
 
