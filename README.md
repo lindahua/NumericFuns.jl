@@ -68,6 +68,55 @@ Here is a table of functor types for operators:
 |  NE         | ``!=`` | Number  |
 
 
+#### Functors for math functions
+
+The package also defined functors for named functions. The naming of functor types follows the ``$(capitalize(funname))Fun`` rule. 
+For example, the functor type for ``sqrt`` is ``SqrtFun``, and that for ``lgamma`` is ``LgammaFun``, etc.
+
+In particular, the package defines functors for the following functions:
+
+* arithmetic functions: 
+
+```
+abs, abs2, real, imag, 
+sign, signbit, copysign, flipsign, 
+div, fld, rem, mod, inv
+```
+
+* rounding functions: 
+
+```
+floor, ceil, trunc, round, 
+ifloor, iceil, itrunc, iround
+```
+
+* algebraic functions: 
+
+```sqrt, cbrt, hypot```
+
+* exponential & logarithm: 
+
+```
+exp, exp2, exp10, expm1, 
+log, log2, log10, log1p
+```
+
+* trigonometric functions: 
+
+```
+sin, cos, tan, cot, sec, csc, 
+asin, acos, atan, acot, asec, acsc, atan2, 
+sinc, cosc, sinpi, cospi, 
+sind, cosd, tand, cotd, secd, cscd, 
+asind, acosd, atand, acotd, asecd, acscd
+```
+
+
+
+
+
+
+
 
 
 
