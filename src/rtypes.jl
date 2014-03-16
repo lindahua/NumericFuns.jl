@@ -216,3 +216,34 @@ result_type{T1<:Real,T2<:Real}(::Atan2Fun, ::Type{T1}, ::Type{T2}) = promote_typ
 result_type{T<:Number}(::Union(SinhFun,CoshFun,TanhFun,CothFun,SechFun,CschFun), ::Type{T}) = fptype(T)
 result_type{T<:Number}(::Union(AsinhFun,AcoshFun,AtanhFun,AcothFun,AsechFun,AcschFun), ::Type{T}) = fptype(T)
 
+# erf & friends
+
+result_type{T<:Number}(::Union(ErfFun,ErfcFun,ErfiFun,ErfcxFun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(ErfinvFun,ErfcinvFun), ::Type{T}) = fptype(T)
+
+# gamma, beta, & friends
+
+result_type{T<:Number}(::Union(GammaFun,LgammaFun,EtaFun,ZetaFun), ::Type{T}) = fptype(T)
+result_type{T<:Integer}(::Union(EtaFun,ZetaFun), ::Type{T}) = Float64
+
+result_type(::Union(GammaFun,LgammaFun), ::Type{Complex64}) = Complex128
+
+result_type{T<:FloatingPoint}(::DigammaFun, ::Type{T}) = T
+result_type{T<:Integer}(::DigammaFun, ::Type{T}) = Float64
+
+result_type{T1<:Real,T2<:Real}(::Union(BetaFun,LbetaFun), ::Type{T1}, ::Type{T2}) =
+    promote_type(fptype(T1),fptype(T2))
+
+result_type{T1<:Integer,T2<:Integer}(::Union(BetaFun,LbetaFun), ::Type{T1}, ::Type{T2}) = Float64
+
+# airy & friends
+
+result_type{T<:Number}(::Union(AiryFun,AiryprimeFun,AiryaiFun,AiryaiprimeFun,AirybiFun,AirybiprimeFun),::Type{T}) = 
+    fptype(T)
+
+# bessel & friends
+
+result_type{T<:Number}(::Union(Besselj0Fun, Besselj1Fun, Bessely0Fun, Bessely1Fun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(BesseliFun, BesseljFun, BesselkFun, BesselyFun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(Hankelh1Fun, Hankelh2Fun), ::Type{T}) = fptype(T)
+

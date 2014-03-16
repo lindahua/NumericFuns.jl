@@ -235,8 +235,8 @@ export Hankelh1Fun, Hankelh2Fun
 
 @functor1a erf Number
 @functor1a erfc Number
-@functor1a erfinv Number
-@functor1a erfcinv Number
+@functor1a erfinv Real
+@functor1a erfcinv Real
 
 @functor1a erfi Number
 @functor1a erfcx Number

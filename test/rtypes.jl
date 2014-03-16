@@ -167,9 +167,58 @@ println("    hyperbolic functions")
 
 for F in [SinhFun, CoshFun, TanhFun, CothFun, SechFun, CschFun, 
           AsinhFun, AcoshFun, AtanhFun, AcothFun, AsechFun, AcschFun]
+    for T in numerictypes_r
+        check_rtype(F(), T)
+    end
+end
+
+println("    error functions & friends")
+
+for F in [ErfFun,ErfcFun,ErfiFun,ErfcxFun]
+    for T in numerictypes_r
+        check_rtype(F(), T)
+    end
+end
+
+for F in [ErfinvFun, ErfcinvFun]
     for T in realtypes
         check_rtype(F(), T)
     end
 end
 
+println("    gamma & friends")
+
+for F in [GammaFun,LgammaFun,EtaFun,ZetaFun]
+    for T in numerictypes_r
+        check_rtype(F(), T)
+    end
+end
+
+for T in realtypes
+    check_rtype(DigammaFun(), T)
+end
+
+println("    beta & lbeta")
+
+for F in [BetaFun, LbetaFun]
+    for T1 in realtypes, T2 in realtypes
+        check_rtype(F(), T1, T2)
+    end    
+end
+
+println("    airy & friends")
+
+for F in [AiryFun,AiryprimeFun,AiryaiFun,AiryaiprimeFun,AirybiFun,AirybiprimeFun]
+    for T in numerictypes_r
+        check_rtype(F(), T)
+    end
+end
+
+println("    bessel & friends")
+
+for F in [Besselj0Fun, Besselj1Fun, Bessely0Fun, Bessely1Fun]
+    for T in numerictypes_r
+        check_rtype(F(), T)
+    end
+end
 
