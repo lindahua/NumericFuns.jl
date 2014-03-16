@@ -53,7 +53,6 @@ Here is a table of functor types for operators:
 |  Divide     | ``/``  | Number  |
 |  RDivide    | ``\``  | Number  |
 |  Pow        | ``^``  | Number  |
-|-------------|--------|---------|
 |  And        | ``&``  | Bool    |
 |  Or         | ``|``  | Bool    |
 |  Not        | ``!``  | Bool    | 
@@ -61,7 +60,6 @@ Here is a table of functor types for operators:
 |  BitwiseOr  | ``|``  | Integer |
 |  BitwiseNot | ``~``  | Integer | 
 |  BitwiseXor | ``$``  | Integer | 
-|-------------|--------|---------|
 |  LT         | ``<``  | Real    |
 |  GT         | ``>``  | Real    |
 |  LE         | ``<=`` | Real    |
