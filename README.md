@@ -54,10 +54,10 @@ Here is a table of functor types for operators:
 |  RDivide    | ``\``  | Number  |
 |  Pow        | ``^``  | Number  |
 |  And        | ``&``  | Bool    |
-|  Or         | ``&#124``  | Bool    |
+|  Or         | &#124  | Bool    |
 |  Not        | ``!``  | Bool    | 
 |  BitwiseAnd | ``&``  | Integer |
-|  BitwiseOr  | ``&#124``  | Integer |
+|  BitwiseOr  | &#124  | Integer |
 |  BitwiseNot | ``~``  | Integer | 
 |  BitwiseXor | ``$``  | Integer | 
 |  LT         | ``<``  | Real    |
