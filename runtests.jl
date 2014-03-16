@@ -1,4 +1,4 @@
-tests = ["functors"]
+tests = ["functors", "rtypes"]
 
 for t in tests
 	fp = joinpath("test", "$(t).jl")

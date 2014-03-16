@@ -4,8 +4,6 @@
 #
 #################################################
 
-export Functor, evaluate, @functor1, @functor2
-
 abstract Functor{N}  # N is the number of arguments
 
 ## macros for defining functors
