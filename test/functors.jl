@@ -71,7 +71,8 @@ end
 for (F, sf) in [(AbsFun, abs), 
                 (Abs2Fun, abs2), 
                 (RealFun, real), 
-                (ImagFun, imag)]
+                (ImagFun, imag),
+                (InvFun, inv)]
 
     @test evaluate(F(), 5.0) == sf(5.0)
     @test evaluate(F(), -5.0) == sf(-5.0)

@@ -6,7 +6,7 @@ module NumericFunctors
     Functor, evaluate, @functor1, @functor2,
 
     # rtypes
-    fptype
+    fptype, arithtype, result_type
 
 
     # source files

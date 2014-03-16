@@ -104,7 +104,7 @@ export BitwiseNot, BitwiseAnd, BitwiseOr, BitwiseXor
 
 ## arithmetic functions
 
-export DivFun, FldFun, RemFun, ModFun
+export DivFun, FldFun, RemFun, ModFun, InvFun
 export AbsFun, Abs2Fun, RealFun, ImagFun
 export SignFun, SignbitFun, CopysignFun, FlipsignFun
 
@@ -112,6 +112,7 @@ export SignFun, SignbitFun, CopysignFun, FlipsignFun
 @functor2a fld Real
 @functor2a rem Real
 @functor2a mod Real
+@functor1a inv Number
 
 @functor1a abs  Number
 @functor1a abs2 Number

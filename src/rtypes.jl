@@ -6,18 +6,167 @@
 #
 #################################################
 
-# fptype
+## fptype
 
-fptype(::Type{Bool}) = Float32
-fptype(::Type{Int8}) = Float32
-fptype(::Type{Int16}) = Float32
-fptype(::Type{Uint8}) = Float32
-fptype(::Type{Uint16}) = Float32
-
+fptype{T<:Union(Bool,Int8,Int16,Uint8,Uint16)}(::Type{T}) = Float32
 fptype{T<:Integer}(::Type{T}) = Float64
 fptype{T<:FloatingPoint}(::Type{T}) = T
 
 fptype{T<:Integer}(::Type{Complex{T}}) = Complex{fptype(T)}
 fptype{T<:FloatingPoint}(::Type{Complex{T}}) = Complex{T}
+
+## signed & unsigned type
+
+signedtype{T<:Signed}(::Type{T}) = T
+signedtype(::Type{Uint8}) = Int8
+signedtype(::Type{Uint16}) = Int16
+signedtype(::Type{Uint32}) = Int32
+signedtype(::Type{Uint64}) = Int64
+signedtype(::Type{Uint128}) = Int128
+
+unsignedtype{T<:Unsigned}(::Type{T}) = T
+unsignedtype(::Type{Int8}) = Uint8
+unsignedtype(::Type{Int16}) = Uint16
+unsignedtype(::Type{Int32}) = Uint32
+unsignedtype(::Type{Int64}) = Uint64
+unsignedtype(::Type{Int128}) = Uint128
+
+## arithtype (unary)
+
+arithtype(::Type{Bool}) = Int64
+arithtype{T<:Signed}(::Type{T}) = Int64
+arithtype{T<:Unsigned}(::Type{T}) = Uint64
+arithtype(::Type{Int128}) = Int128
+arithtype(::Type{Uint128}) = Uint128
+
+arithtype(::Type{Float32}) = Float32
+arithtype(::Type{Float64}) = Float64
+arithtype(::Type{Complex64}) = Complex64
+arithtype(::Type{Complex128}) = Complex128
+arithtype{T<:Integer}(::Type{Complex{T}}) = Complex{arithtype(T)}
+
+## arithtype (binary)
+
+arithtype{T<:Real}(::Type{T},::Type{T}) = arithtype(T)
+arithtype{T1<:Real,T2<:Real}(::Type{T1}, ::Type{T2}) = arithtype(promote_type(T1, T2))
+arithtype{T1<:Real,T2<:Real}(::Type{T1}, ::Type{Complex{T2}}) = Complex{arithtype(T1,T2)}
+arithtype{T1<:Real,T2<:Real}(::Type{Complex{T1}}, ::Type{T2}) = Complex{arithtype(T1,T2)}
+arithtype{T1<:Real,T2<:Real}(::Type{Complex{T1}}, ::Type{Complex{T2}}) = Complex{arithtype(T1,T2)}
+
+
+#################################################
+#
+#   result type inference
+#
+#################################################
+
+## arithmetics
+
+# negate
+
+result_type{T<:Number}(::Negate, ::Type{T}) = arithtype(T)
+
+# abs
+
+result_type{T<:Number}(::AbsFun, ::Type{T}) = arithtype(T)
+result_type(::AbsFun, ::Type{Bool}) = Bool
+result_type{T<:Unsigned}(::AbsFun, ::Type{T}) = T
+result_type{T<:Real}(::AbsFun, ::Type{Complex{T}}) = fptype(T)
+
+# abs2
+
+result_type{T<:Number}(::Abs2Fun, ::Type{T}) = arithtype(T)
+result_type(::Abs2Fun, ::Type{Bool}) = Bool
+result_type{T<:Real}(::Abs2Fun, ::Type{Complex{T}}) = arithtype(T)
+
+# real & imag
+
+result_type{T<:Real}(::Union(RealFun,ImagFun), ::Type{T}) = T
+result_type{T<:Real}(::Union(RealFun,ImagFun), ::Type{Complex{T}}) = T
+
+# add & subtract
+
+result_type{T1<:Number,T2<:Number}(::Union(Add,Subtract), ::Type{T1}, ::Type{T2}) = arithtype(T1, T2)
+
+# multiply
+
+result_type{T1<:Real,T2<:Real}(::Multiply, ::Type{T1}, ::Type{T2}) = arithtype(T1,T2)
+result_type(::Multiply, ::Type{Bool}, ::Type{Bool}) = Bool
+result_type{T<:Real}(::Multiply, ::Type{Bool}, ::Type{T}) = T
+result_type{T<:Real}(::Multiply, ::Type{T}, ::Type{Bool}) = T
+
+result_type{T1<:Real,T2<:Real}(::Multiply, ::Type{Complex{T1}}, ::Type{Complex{T2}}) = 
+    Complex{arithtype(T1, T2)}
+result_type{T1<:Real,T2<:Real}(op::Multiply, ::Type{T1}, ::Type{Complex{T2}}) = 
+    Complex{result_type(op, T1, T2)}
+result_type{T1<:Real,T2<:Real}(op::Multiply, ::Type{Complex{T1}}, ::Type{T2}) = 
+    Complex{result_type(op, T1, T2)}
+
+# inv
+
+result_type{T<:Number}(::InvFun, ::Type{T}) = fptype(T)
+
+# divide
+
+result_type{T1<:Real,T2<:Real}(::Divide, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
+result_type{T1<:Integer,T2<:Integer}(::Divide, ::Type{T1}, ::Type{T2}) = 
+    promote_type(fptype(T1), fptype(T2))
+
+result_type{T1<:Real,T2<:Complex}(op::Divide, ::Type{T1}, ::Type{T2}) = 
+    result_type(Multiply(), T1, fptype(T2))
+
+result_type{T1<:Real,T2<:Real}(op::Divide, ::Type{Complex{T1}}, ::Type{T2}) = 
+    Complex{result_type(op, T1, T2)}
+
+result_type{T1<:Complex,T2<:Complex}(op::Divide, ::Type{T1}, ::Type{T2}) = 
+    result_type(Multiply(), T1, fptype(T2))
+
+# rdivide
+
+result_type{T1<:Number,T2<:Number}(::RDivide, ::Type{T1}, ::Type{T2}) = 
+    result_type(Divide(), T2, T1)
+
+# pow
+
+result_type(::Pow, ::Type{Bool}, ::Type{Bool}) = Bool
+result_type{T<:Real}(::Pow, ::Type{T}, ::Type{Bool}) = T
+
+result_type{T2<:Integer}(::Pow, ::Type{Bool}, ::Type{T2}) = Bool
+result_type{T1<:Real,T2<:Integer}(::Pow, ::Type{T1}, ::Type{T2}) = arithtype(T1)
+result_type{T1<:Real,T2<:Real}(::Pow, ::Type{T1}, ::Type{T2}) = fptype(promote_type(T1, T2))
+
+result_type{T1<:Real}(::Pow, ::Type{Complex{T1}}, ::Type{Bool}) = Complex{T1}
+result_type{T1<:Real,T2<:Integer}(::Pow, ::Type{Complex{T1}}, ::Type{T2}) = Complex{arithtype(T1)}
+
+result_type{T1<:Real,T2<:Real}(::Pow, ::Type{Complex{T1}}, ::Type{T2}) = 
+    Complex{fptype(promote_type(T1, T2))}
+result_type{T1<:Real,T2<:Real}(::Pow, ::Type{T1}, ::Type{Complex{T2}}) = 
+    Complex{fptype(promote_type(T1, T2))}
+result_type{T1<:Real,T2<:Real}(::Pow, ::Type{Complex{T1}}, ::Type{Complex{T2}}) = 
+    Complex{fptype(promote_type(T1, T2))}
+
+# quotient & module
+
+result_type{T1<:Real,T2<:Real}(::Union(DivFun,RemFun), ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
+
+result_type{T1<:Signed,T2<:Unsigned}(::Union(DivFun,RemFun), ::Type{T1}, ::Type{T2}) = 
+    signedtype(promote_type(T1, T2))
+result_type{T1<:Unsigned,T2<:Signed}(::Union(DivFun,RemFun), ::Type{T1}, ::Type{T2}) = 
+    unsignedtype(promote_type(T1, T2))
+
+result_type{T1<:Real,T2<:Real}(::FldFun, ::Type{T1}, ::Type{T2}) = 
+    arithtype(T1, T2)
+result_type{T1<:Union(Unsigned,Bool), T2<:Union(Unsigned,Bool)}(::FldFun, ::Type{T1}, ::Type{T2}) = 
+    promote_type(T1, T2)
+result_type{T1<:Signed,T2<:Unsigned}(::FldFun, ::Type{T1}, ::Type{T2}) = 
+    signedtype(promote_type(T1, T2))
+result_type{T1<:Unsigned,T2<:Signed}(::FldFun, ::Type{T1}, ::Type{T2}) = 
+    unsignedtype(promote_type(T1, T2))
+
+result_type{T1<:Real,T2<:Real}(::ModFun, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
+result_type{T1<:Signed,T2<:Unsigned}(::ModFun, ::Type{T1}, ::Type{T2}) = unsignedtype(promote_type(T1, T2))
+result_type{T1<:Unsigned,T2<:Signed}(::ModFun, ::Type{T1}, ::Type{T2}) = signedtype(promote_type(T1, T2))
+
+
 
 
