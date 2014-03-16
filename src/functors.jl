@@ -85,8 +85,8 @@ export LT, GT, LE, GE, EQ, NE
 @functor2(GT, >,  Real)
 @functor2(LE, <=, Real)
 @functor2(GE, >=, Real)
-@functor2(EQ, ==, Real)
-@functor2(NE, !=, Real)
+@functor2(EQ, ==, Number)
+@functor2(NE, !=, Number)
 
 ## logical & bitwise operators
 

@@ -180,6 +180,11 @@ result_type{T<:Integer}(::BitwiseNot, ::Type{T}) = T
 result_type{T1<:Integer,T2<:Integer}(::Union(BitwiseAnd,BitwiseOr,BitwiseXor), ::Type{T1}, ::Type{T2}) = 
     promote_type(T1, T2)
 
+# comparison
+
+result_type{T1<:Real,T2<:Real}(::Union(LT,GT,LE,GE), ::Type{T1}, ::Type{T2}) = Bool
+result_type{T1<:Number,T2<:Number}(::Union(EQ,NE), ::Type{T1}, ::Type{T2}) = Bool
+
 # rounding
 
 result_type{T<:Real}(::Union(FloorFun, CeilFun, TruncFun, RoundFun), ::Type{T}) = T
