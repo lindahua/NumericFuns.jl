@@ -57,3 +57,104 @@ for (F, sf) in [(BitwiseAnd, &),
     @test evaluate(F(), 5, 9) == sf(5, 9)
 end
 
+println("    arithmetic functions")
+
+for (F, sf) in [(DivFun, div), 
+                (FldFun, fld), 
+                (RemFun, rem), 
+                (ModFun, mod)]
+
+    @test evaluate(F(),  14, 3) == sf( 14, 3)
+    @test evaluate(F(), -14, 3) == sf(-14, 3)
+end
+
+for (F, sf) in [(AbsFun, abs), 
+                (Abs2Fun, abs2), 
+                (RealFun, real), 
+                (ImagFun, imag)]
+
+    @test evaluate(F(), 5.0) == sf(5.0)
+    @test evaluate(F(), -5.0) == sf(-5.0)
+    @test evaluate(F(), 3.0 + 4.0im) == sf(3.0 + 4.0im)
+end
+
+for (F, sf) in [(SignFun, sign), 
+                (SignbitFun, signbit)]
+
+    @test evaluate(F(),  0) == sf(0)
+    @test evaluate(F(),  1) == sf(1)
+    @test evaluate(F(), -1) == sf(-1)
+end
+
+for (F, sf) in [(CopysignFun, copysign), 
+                (FlipsignFun, flipsign)]
+
+    @test evaluate(F(),  2,  1) == sf( 2,  1)
+    @test evaluate(F(),  2, -1) == sf( 2, -1)
+    @test evaluate(F(), -2,  1) == sf(-2,  1)
+    @test evaluate(F(), -2, -1) == sf(-2, -1)
+end
+
+println("    rounding functions")
+
+for (F, sf) in [(FloorFun, floor), 
+                (CeilFun, ceil), 
+                (TruncFun, trunc), 
+                (RoundFun, round), 
+                (IfloorFun, ifloor), 
+                (IceilFun, iceil), 
+                (ItruncFun, itrunc), 
+                (IroundFun, iround)]
+
+    @test evaluate(F(),  3.4) === sf(3.4)
+    @test evaluate(F(),  3.8) === sf(3.8)
+    @test evaluate(F(), -3.4) === sf(-3.4)
+    @test evaluate(F(), -3.8) === sf(-3.8)
+end
+
+println("    algebraic functions")
+
+for (F, sf) in [(SqrtFun, sqrt), (CbrtFun, cbrt)]
+    @test evaluate(F(), 64.0) == sf(64.0)
+end
+
+@test evaluate(HypotFun(), 3.0, 4.0) == hypot(3.0, 4.0)
+
+println("    trancendental functions")
+
+for (F, sf) in [(ExpFun, exp), 
+                (Exp2Fun, exp2), 
+                (Exp10Fun, exp10), 
+                (Expm1Fun, expm1), 
+                (LogFun, log), 
+                (Log2Fun, log2), 
+                (Log10Fun, log10), 
+                (Log1pFun, log1p), 
+                (SinFun, sin), 
+                (SinhFun, sinh), 
+                (SindFun, sind), 
+                (SincFun, sinc), 
+                (SinpiFun, sinpi),
+                (AtanFun, atan), 
+                (AtandFun, atand)]
+
+    @test evaluate(F(), 3.0) == sf(3.0)
+end
+
+@test evaluate(Atan2Fun(), 3.0, 4.0) == atan2(3.0, 4.0)
+
+
+println("    special functions")
+
+for (Fun, sf) in [(ErfFun(), erf), 
+                  (GammaFun(), gamma), 
+                  (AiryFun(), airy), 
+                  (Besselj0Fun(), besselj0),            
+                  (BesseljFun(2), x -> besselj(2, x))]
+
+    @test evaluate(Fun, 2.0) == sf(2.0)
+    @test evaluate(Fun, 1.0 + 2.0im) == sf(1.0 + 2.0im)
+end
+
+
+
