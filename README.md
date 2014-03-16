@@ -75,7 +75,7 @@ For example, the functor type for ``sqrt`` is ``SqrtFun``, and that for ``lgamma
 
 In particular, the package defines functors for the following functions:
 
-* arithmetic functions: 
+* arithmetic functions
 
     ```
     abs, abs2, real, imag, 
@@ -83,25 +83,25 @@ In particular, the package defines functors for the following functions:
     div, fld, rem, mod, inv
     ```
 
-* rounding functions: 
+* rounding functions
 
     ```
     floor, ceil, trunc, round, 
     ifloor, iceil, itrunc, iround
     ```
 
-* algebraic functions: 
+* algebraic functions
 
     ```sqrt, cbrt, hypot```
 
-* exponential & logarithm: 
+* exponential & logarithm
 
     ```
     exp, exp2, exp10, expm1, 
     log, log2, log10, log1p
     ```
 
-* trigonometric functions: 
+* trigonometric functions
 
     ```
     sin, cos, tan, cot, sec, csc, 
@@ -111,12 +111,42 @@ In particular, the package defines functors for the following functions:
     asind, acosd, atand, acotd, asecd, acscd
     ```
 
+* hyperbolic functions
 
+    ```
+    sinh, cosh, tanh, coth, sech, csch,
+    asinh, acosh, atanh, acoth, asech, acsch
+    ```
 
+* special functions
 
+    ```
+    erf, erfc, erfinv, erfcinv, erfi, erfcx,
+    gamma, lgamma, digamma,
+    eta, zeta, beta, lbeta,
+    airy, airyprime, airyai, airyaiprime, airybi, airybiprime,
+    besselj0, besselj1, bessely0, bessely1
+    besseli, besselj, besselk, bessely,
+    hankelh1, hankelh2
+    ```
 
+## Result Type Inference
 
+Each functor defined in this package comes with ``result_type`` methods that return the type of the result, given the argument types. These methods are thoroughly tested to ensure correctness. For example, 
 
+```julia
+result_type(Add(), Int, Float64)  # --> returns Float64
+result_type(SqrtFun(), Int)   # --> returns Float64
+```
 
+The package also provides other convenient methods for type inference, which include ``fptype`` and ``arithtype``. Particularly, we have
 
+```julia
+fptype{T<:Real}(::Type{T}) == typeof(Convert(FloatingPoint, one(T)))
+fptype{T<:Real}(::Type{Complex{T}}) == Complex{fptype(T)}
+
+arithtype{T1<:Number, T2<:Number} == typeof(one(T1) + one(T2))
+```
+
+The internal implementation of these functions are very efficient, usually without actually evaluating the expressions.
 
