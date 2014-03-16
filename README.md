@@ -77,39 +77,39 @@ In particular, the package defines functors for the following functions:
 
 * arithmetic functions: 
 
-```
-abs, abs2, real, imag, 
-sign, signbit, copysign, flipsign, 
-div, fld, rem, mod, inv
-```
+    ```
+    abs, abs2, real, imag, 
+    sign, signbit, copysign, flipsign, 
+    div, fld, rem, mod, inv
+    ```
 
 * rounding functions: 
 
-```
-floor, ceil, trunc, round, 
-ifloor, iceil, itrunc, iround
-```
+    ```
+    floor, ceil, trunc, round, 
+    ifloor, iceil, itrunc, iround
+    ```
 
 * algebraic functions: 
 
-```sqrt, cbrt, hypot```
+    ```sqrt, cbrt, hypot```
 
 * exponential & logarithm: 
 
-```
-exp, exp2, exp10, expm1, 
-log, log2, log10, log1p
-```
+    ```
+    exp, exp2, exp10, expm1, 
+    log, log2, log10, log1p
+    ```
 
 * trigonometric functions: 
 
-```
-sin, cos, tan, cot, sec, csc, 
-asin, acos, atan, acot, asec, acsc, atan2, 
-sinc, cosc, sinpi, cospi, 
-sind, cosd, tand, cotd, secd, cscd, 
-asind, acosd, atand, acotd, asecd, acscd
-```
+    ```
+    sin, cos, tan, cot, sec, csc, 
+    asin, acos, atan, acot, asec, acsc, atan2, 
+    sinc, cosc, sinpi, cospi, 
+    sind, cosd, tand, cotd, secd, cscd, 
+    asind, acosd, atand, acotd, asecd, acscd
+    ```
 
 
 
