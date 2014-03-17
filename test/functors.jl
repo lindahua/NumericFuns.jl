@@ -62,7 +62,9 @@ println("    arithmetic functions")
 for (F, sf) in [(DivFun, div), 
                 (FldFun, fld), 
                 (RemFun, rem), 
-                (ModFun, mod)]
+                (ModFun, mod), 
+                (MaxFun, max), 
+                (MinFun, min)]
 
     @test evaluate(F(),  14, 3) == sf( 14, 3)
     @test evaluate(F(), -14, 3) == sf(-14, 3)

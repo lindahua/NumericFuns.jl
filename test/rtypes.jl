@@ -81,12 +81,24 @@ end
 
 println("    arithmetics (quotient & modulo)")
 
-for F in [DivFun, FldFun, RemFun, ModFun]
+for F in [DivFun, FldFun, RemFun, ModFun, MaxFun, MinFun]
     println("        $F")
     for T1 in realtypes, T2 in realtypes
         check_rtype(F(), T1, T2)
     end
 end
+
+## comparison
+
+println("    comparison operators")
+
+for F in [LT, GT, LE, GE, EQ, NE]
+    println("        $F")
+    for T1 in realtypes, T2 in realtypes
+        check_rtype(F(), T1, T2)
+    end  
+end
+
 
 ## logical & bitwise
 

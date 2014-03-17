@@ -145,6 +145,12 @@ result_type{T1<:Real,T2<:Real}(::Pow, ::Type{T1}, ::Type{Complex{T2}}) =
 result_type{T1<:Real,T2<:Real}(::Pow, ::Type{Complex{T1}}, ::Type{Complex{T2}}) = 
     Complex{fptype(promote_type(T1, T2))}
 
+# max & min
+
+result_type{T<:Real}(::Union(MaxFun,MinFun), ::Type{T}, ::Type{T}) = T
+result_type{T1<:Real,T2<:Real}(::Union(MaxFun,MinFun), ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
+
+
 # quotient & module
 
 result_type{T1<:Real,T2<:Real}(::Union(DivFun,RemFun), ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
