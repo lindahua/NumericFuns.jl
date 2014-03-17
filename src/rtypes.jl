@@ -192,7 +192,6 @@ result_type{T1<:Number,T2<:Number,T3<:Number}(::FMA, ::Type{T1}, ::Type{T2}, ::T
 
 result_type{T<:Number}(::IfelseFun, ::Type{Bool}, ::Type{T}, ::Type{T}) = T
 
-
 # logical
 
 result_type(::Not, ::Type{Bool}) = Bool
@@ -216,6 +215,10 @@ result_type{T1<:Number,T2<:Number}(::Union(EQ,NE), ::Type{T1}, ::Type{T2}) = Boo
 result_type{T<:Real}(::Union(FloorFun, CeilFun, TruncFun, RoundFun), ::Type{T}) = T
 result_type{T<:Integer}(::Union(IfloorFun, IceilFun, ItruncFun, IroundFun), ::Type{T}) = T
 result_type{T<:FloatingPoint}(::Union(IfloorFun, IceilFun, ItruncFun, IroundFun), ::Type{T}) = Int64
+
+# number classification
+
+result_type{T<:Real}(::Union(IsnanFun, IsinfFun, IsfiniteFun), ::Type{T}) = Bool
 
 # algebraic functions
 

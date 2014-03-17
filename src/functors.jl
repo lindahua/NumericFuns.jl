@@ -145,6 +145,14 @@ export IfloorFun, IceilFun, ItruncFun, IroundFun
 @functor1a itrunc Real
 @functor1a iround Real
 
+## number classification
+
+export IsnanFun, IsinfFun, IsfiniteFun
+
+@functor1a isnan Real
+@functor1a isinf Real
+@functor1a isfinite Real
+
 ## algebraic functions
 
 export SqrtFun, CbrtFun, HypotFun

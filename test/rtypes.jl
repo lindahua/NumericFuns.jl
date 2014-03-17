@@ -137,6 +137,18 @@ for F in [FloorFun, CeilFun, TruncFun, RoundFun,
     end
 end
 
+# number classification functions
+
+println("    number classification")
+
+for F in [IsnanFun, IsinfFun, IsfiniteFun]
+    for T in realtypes
+        check_rtype(F(), T)
+    end
+end
+
+# algebraic functions
+
 println("    algebraic functions")
 
 for F in [SqrtFun, RsqrtFun]
