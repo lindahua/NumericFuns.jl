@@ -72,6 +72,7 @@ end
 ## arithmetic operators
 
 export Negate, Add, Subtract, Multiply, Divide, RDivide, Pow
+export FixPow, FixAbsPow
 
 @functor1(Negate,   -, Number)
 @functor2(Add,      +, Number)
@@ -80,6 +81,16 @@ export Negate, Add, Subtract, Multiply, Divide, RDivide, Pow
 @functor2(Divide,   /, Number)
 @functor2(RDivide,  \, Number)
 @functor2(Pow,      ^, Number)
+
+immutable FixPow{T<:Real} <: Functor{1}
+    p::T
+end
+evaluate(f::FixPow, x::Real) = x ^ f.p
+
+immutable FixAbsPow{T<:Real} <: Functor{1}
+    p::T
+end
+evaluate(f::FixAbsPow, x::Real) = abs(x) ^ f.p
 
 ## comparison operators
 

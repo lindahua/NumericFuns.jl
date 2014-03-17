@@ -155,6 +155,9 @@ result_type{T1<:Real,T2<:Real}(::Pow, ::Type{T1}, ::Type{Complex{T2}}) =
 result_type{T1<:Real,T2<:Real}(::Pow, ::Type{Complex{T1}}, ::Type{Complex{T2}}) = 
     Complex{fptype(promote_type(T1, T2))}
 
+result_type{T<:Real, Tx<:Real}(::FixPow{T}, ::Type{Tx}) = result_type(Pow(), Tx, T)
+result_type{T<:Real, Tx<:Real}(::FixAbsPow{T}, ::Type{Tx}) = result_type(Pow(), result_type(Abs(), Tx), T)
+
 # max & min
 
 result_type{T<:Real}(::Union(MaxFun,MinFun), ::Type{T}, ::Type{T}) = T
