@@ -102,10 +102,6 @@ result_type{T1<:Real,T2<:Real}(op::Multiply, ::Type{T1}, ::Type{Complex{T2}}) =
 result_type{T1<:Real,T2<:Real}(op::Multiply, ::Type{Complex{T1}}, ::Type{T2}) = 
     Complex{result_type(op, T1, T2)}
 
-# inv
-
-result_type{T<:Number}(::InvFun, ::Type{T}) = fptype(T)
-
 # divide
 
 result_type{T1<:Real,T2<:Real}(::Divide, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)

@@ -2,6 +2,10 @@ module NumericFunctors
 
     export 
 
+    # mathfuns
+    sqr, rcp, rsqrt, rcbrt, xlogx, xlogy, 
+    sigmoid, logit, softplus, invsoftplus, logsumexp,
+
     # functors (Note: export of specific functors are in functors.jl)
     Functor, UnaryFunctor, BinaryFunctor, TernaryFunctor, 
     evaluate, @functor1, @functor2,
@@ -12,7 +16,9 @@ module NumericFunctors
 
     # source files
 
+    include("mathfuns.jl")
     include("functors.jl")
     include("rtypes.jl")
+    
 
 end # module

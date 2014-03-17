@@ -108,15 +108,15 @@ export BitwiseNot, BitwiseAnd, BitwiseOr, BitwiseXor
 
 ## arithmetic functions
 
-export DivFun, FldFun, RemFun, ModFun, InvFun
+export DivFun, FldFun, RemFun, ModFun
 export AbsFun, Abs2Fun, RealFun, ImagFun, MaxFun, MinFun
+export SqrFun, RcpFun
 export SignFun, SignbitFun, CopysignFun, FlipsignFun
 
 @functor2a div Real
 @functor2a fld Real
 @functor2a rem Real
 @functor2a mod Real
-@functor1a inv Number
 
 @functor1a abs  Number
 @functor1a abs2 Number
@@ -124,6 +124,9 @@ export SignFun, SignbitFun, CopysignFun, FlipsignFun
 @functor1a imag Number
 @functor2a max Real
 @functor2a min Real
+
+@functor1a sqr Number
+@functor1a rcp Number
 
 @functor1a sign     Real
 @functor1a signbit  Real
@@ -148,10 +151,15 @@ export IfloorFun, IceilFun, ItruncFun, IroundFun
 ## algebraic functions
 
 export SqrtFun, CbrtFun, HypotFun
+export RsqrtFun, RcbrtFun
 
 @functor1a sqrt  Number
 @functor1a cbrt  Real
 @functor2a hypot Real
+
+@functor1a rsqrt Number
+@functor1a rcbrt Real
+
 
 ## exponential & logarithm
 

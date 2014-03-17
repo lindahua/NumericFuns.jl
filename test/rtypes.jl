@@ -64,7 +64,7 @@ end
 
 println("    arithmetics (unary)")
 
-for F in [Negate, AbsFun, Abs2Fun, RealFun, ImagFun, InvFun]
+for F in [Negate, AbsFun, Abs2Fun, RealFun, ImagFun]
     for T in numerictypes
         check_rtype(F(), T) 
     end
