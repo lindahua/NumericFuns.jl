@@ -89,6 +89,11 @@ result_type{T<:Number}(::SqrFun, ::Type{T}) = arithtype(T)
 result_type{T<:Real}(::Union(RealFun,ImagFun), ::Type{T}) = T
 result_type{T<:Real}(::Union(RealFun,ImagFun), ::Type{Complex{T}}) = T
 
+# sign & signbit
+
+result_type{T<:Real}(::SignFun, ::Type{T}) = T
+result_type{T<:Real}(::SignbitFun, ::Type{T}) = Int
+
 # add & subtract
 
 result_type{T1<:Number,T2<:Number}(::Union(Add,Subtract), ::Type{T1}, ::Type{T2}) = arithtype(T1, T2)

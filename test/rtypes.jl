@@ -70,6 +70,12 @@ for F in [Negate, AbsFun, Abs2Fun, RealFun, ImagFun, SqrFun, RcpFun]
     end
 end
 
+for F in [SignFun, SignbitFun]
+    for T in realtypes
+        check_rtype(F(), T)
+    end
+end
+
 println("    arithmetics (binary)")
 
 for F in [Add, Subtract, Multiply, Divide, RDivide, Pow]
