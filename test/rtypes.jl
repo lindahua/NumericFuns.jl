@@ -64,7 +64,7 @@ end
 
 println("    arithmetics (unary)")
 
-for F in [Negate, AbsFun, Abs2Fun, RealFun, ImagFun]
+for F in [Negate, AbsFun, Abs2Fun, RealFun, ImagFun, SqrFun, RcpFun]
     for T in numerictypes
         check_rtype(F(), T) 
     end
@@ -133,12 +133,16 @@ end
 
 println("    algebraic functions")
 
-for T in numerictypes
-    check_rtype(SqrtFun(), T)
+for F in [SqrtFun, RsqrtFun]
+    for T in numerictypes
+        check_rtype(F(), T)
+    end
 end
 
-for T in realtypes
-    check_rtype(CbrtFun(), T)
+for F in [CbrtFun, RcbrtFun]
+    for T in realtypes
+        check_rtype(F(), T)
+    end
 end
 
 for T1 in realtypes, T2 in realtypes
@@ -154,9 +158,16 @@ for F in [ExpFun, Exp2Fun, Exp10Fun,
     end
 end
 
-for F in [Expm1Fun, Log1pFun]
+for F in [Expm1Fun, Log1pFun, XlogxFun, 
+          SigmoidFun, LogitFun, SoftplusFun, InvsoftplusFun]
     for T in realtypes
         check_rtype(F(), T)
+    end
+end
+
+for F in [XlogyFun, LogsumexpFun]
+    for T1 in realtypes, T2 in realtypes
+        check_rtype(F(), T1, T2)
     end
 end
 

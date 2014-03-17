@@ -79,6 +79,11 @@ result_type{T<:Number}(::Abs2Fun, ::Type{T}) = arithtype(T)
 result_type(::Abs2Fun, ::Type{Bool}) = Bool
 result_type{T<:Real}(::Abs2Fun, ::Type{Complex{T}}) = arithtype(T)
 
+# sqr
+
+result_type(::SqrFun, ::Type{Bool}) = Bool
+result_type{T<:Number}(::SqrFun, ::Type{T}) = arithtype(T)
+
 # real & imag
 
 result_type{T<:Real}(::Union(RealFun,ImagFun), ::Type{T}) = T
@@ -122,6 +127,10 @@ result_type{T1<:Complex,T2<:Complex}(op::Divide, ::Type{T1}, ::Type{T2}) =
 result_type{T1<:Number,T2<:Number}(::RDivide, ::Type{T1}, ::Type{T2}) = 
     result_type(Divide(), T2, T1)
 
+# rcp
+
+result_type{T<:Number}(::RcpFun, ::Type{T}) = fptype(T)
+ 
 # pow
 
 result_type(::Pow, ::Type{Bool}, ::Type{Bool}) = Bool
@@ -205,7 +214,7 @@ result_type{T<:FloatingPoint}(::Union(IfloorFun, IceilFun, ItruncFun, IroundFun)
 
 # algebraic functions
 
-result_type{T<:Number}(::Union(SqrtFun,CbrtFun), ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union(SqrtFun,CbrtFun,RsqrtFun,RcbrtFun), ::Type{T}) = fptype(T)
 result_type{T1<:Real,T2<:Real}(::HypotFun, ::Type{T1}, ::Type{T2}) = promote_type(fptype(T1), fptype(T2))
 
 # exponential & logarithm
@@ -213,6 +222,10 @@ result_type{T1<:Real,T2<:Real}(::HypotFun, ::Type{T1}, ::Type{T2}) = promote_typ
 result_type{T<:Number}(::Union(ExpFun,Exp2Fun,Exp10Fun), ::Type{T}) = fptype(T)
 result_type{T<:Number}(::Union(LogFun,Log2Fun,Log10Fun), ::Type{T}) = fptype(T)
 result_type{T<:Real}(::Union(Expm1Fun,Log1pFun), ::Type{T}) = fptype(T)
+
+result_type{T<:Real}(::Union(XlogxFun,SigmoidFun,LogitFun,SoftplusFun,InvsoftplusFun), ::Type{T}) = fptype(T)
+result_type{T1<:Real,T2<:Real}(::XlogyFun, ::Type{T1}, ::Type{T2}) = fptype(promote_type(T1, T2))
+result_type{T1<:Real,T2<:Real}(::LogsumexpFun, ::Type{T1}, ::Type{T2}) = fptype(promote_type(T1, T2))
 
 # trigonometric functions
 

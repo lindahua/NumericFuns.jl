@@ -165,6 +165,8 @@ export RsqrtFun, RcbrtFun
 
 export ExpFun, Exp2Fun, Exp10Fun, Expm1Fun
 export LogFun, Log2Fun, Log10Fun, Log1pFun
+export XlogxFun, XlogyFun, SigmoidFun, LogitFun
+export SoftplusFun, InvsoftplusFun, LogsumexpFun
 
 @functor1a exp   Number
 @functor1a exp2  Number
@@ -175,6 +177,14 @@ export LogFun, Log2Fun, Log10Fun, Log1pFun
 @functor1a log2  Number
 @functor1a log10 Number
 @functor1a log1p Real
+
+@functor1a xlogx Real
+@functor2a xlogy Real
+@functor1a sigmoid Real
+@functor1a logit Real
+@functor1a softplus Real
+@functor1a invsoftplus Real
+@functor2a logsumexp Real
 
 ## trigonometric functions
 
