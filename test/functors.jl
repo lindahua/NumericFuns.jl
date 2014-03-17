@@ -88,15 +88,6 @@ for (F, sf) in [(SignFun, sign),
     @test evaluate(F(), -1) == sf(-1)
 end
 
-for (F, sf) in [(CopysignFun, copysign), 
-                (FlipsignFun, flipsign)]
-
-    @test evaluate(F(),  2,  1) == sf( 2,  1)
-    @test evaluate(F(),  2, -1) == sf( 2, -1)
-    @test evaluate(F(), -2,  1) == sf(-2,  1)
-    @test evaluate(F(), -2, -1) == sf(-2, -1)
-end
-
 println("    rounding functions")
 
 for (F, sf) in [(FloorFun, floor), 

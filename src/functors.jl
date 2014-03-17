@@ -110,8 +110,7 @@ export BitwiseNot, BitwiseAnd, BitwiseOr, BitwiseXor
 
 export DivFun, FldFun, RemFun, ModFun
 export AbsFun, Abs2Fun, RealFun, ImagFun, MaxFun, MinFun
-export SqrFun, RcpFun
-export SignFun, SignbitFun, CopysignFun, FlipsignFun
+export SqrFun, RcpFun, SignFun, SignbitFun
 
 @functor2a div Real
 @functor2a fld Real
@@ -130,8 +129,6 @@ export SignFun, SignbitFun, CopysignFun, FlipsignFun
 
 @functor1a sign     Real
 @functor1a signbit  Real
-@functor2a copysign Real
-@functor2a flipsign Real
 
 ## rounding functions
 
