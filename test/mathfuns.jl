@@ -1,4 +1,4 @@
-using NumericFunctors
+using NumericFuns
 using Base.Test
 
 @test sqr(2) === 4

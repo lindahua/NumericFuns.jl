@@ -13,6 +13,6 @@ before_install:
   - sudo apt-get update -qq -y
   - sudo apt-get install libpcre3-dev julia -y
 script:
-  - julia -e 'Pkg.init(); run(`ln -s $(pwd()) $(Pkg.dir("NumericFunctors"))`); Pkg.pin("NumericFunctors"); Pkg.resolve()'
-  - julia -e 'using NumericFunctors; @assert isdefined(:NumericFunctors); @assert typeof(NumericFunctors) === Module'
+  - julia -e 'Pkg.init(); run(`ln -s $(pwd()) $(Pkg.dir("NumericFuns"))`); Pkg.pin("NumericFuns"); Pkg.resolve()'
+  - julia -e 'using NumericFuns; @assert isdefined(:NumericFuns); @assert typeof(NumericFuns) === Module'
   - julia runtests.jl

@@ -1,7 +1,7 @@
-# NumericFunctors
+# NumericFuns
 
 Typed functors for numerical computation.
-[![Build Status](https://travis-ci.org/lindahua/NumericFunctors.jl.png)](https://travis-ci.org/lindahua/NumericFunctors.jl)
+[![Build Status](https://travis-ci.org/lindahua/NumericFuns.jl.png)](https://travis-ci.org/lindahua/NumericFuns.jl)
 
 **Note:** This package was originally part of the [NumericExtensions package](https://github.com/lindahua/NumericExtensions.jl). I realized later that the functors and the type inference machinery can be useful in other packages. Hence, I separate this part to construct a standalone package.
 

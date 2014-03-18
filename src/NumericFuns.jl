@@ -1,4 +1,4 @@
-module NumericFunctors
+module NumericFuns
 
     export 
 
