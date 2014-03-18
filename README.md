@@ -1,11 +1,38 @@
 # NumericFuns
 
-Typed functors for numerical computation.
+Numerical functions and functors.
 [![Build Status](https://travis-ci.org/lindahua/NumericFuns.jl.png)](https://travis-ci.org/lindahua/NumericFuns.jl)
 
 **Note:** This package was originally part of the [NumericExtensions package](https://github.com/lindahua/NumericExtensions.jl). I realized later that the functors and the type inference machinery can be useful in other packages. Hence, I separate this part to construct a standalone package.
 
+This package provides:
+
+- Additional numerical functions, such as ``sqr``, ``rsqrt``, ``xlogx``, ``sigmoid``, ``logit``, etc.
+- Vectorized methods of the additional numerical functions.
+- Typed functors.
+
 -------------
+
+## New Numeric Functions
+
+This package provides several commonly used numerical functions that are not in the Julia Base.
+
+| **function**        | **equivalent expression**         |
+| ------------------- | --------------------------------- |
+| ``sqr(x)``          |  ``x * x``                        |
+| ``rcp(x)``          |  ``1 / x``                        |
+| ``rsqrt(x)``        |  ``1 / sqrt(x)``                  |
+| ``rcbrt(x)``        |  ``1 / cbrt(x)``                  |
+| ``xlogx(x)``        |  ``ifelse(x > 0, x * log(x), 0)`` |
+| ``xlogy(x, y)``     |  ``ifelse(x > 0, x * log(y), 0)`` |
+| ``sigmoid(x)``      |  ``1 / (1 + exp(-x))``            |
+| ``logit(x)``        |  ``log(x / (1 - x))``             |
+| ``softplus(x)``     |  ``log(1 + exp(x))``              |
+| ``invsoftplus(x)``  |  ``log(exp(x) - 1)``              |
+| ``logsumexp(x, y)`` |  ``log(exp(x) + exp(y))``         |
+
+Note that the *equivalent expressions* above are just for the purpose to conveying the semantics. The actual implementation might be different, which would takes a more optimal route that takes care of risk of overflow, type stability, and computational efficiency.
+
 
 ## Functors
 
@@ -78,9 +105,8 @@ In particular, the package defines functors for the following functions:
 * arithmetic functions
 
     ```
-    abs, abs2, real, imag, 
-    sign, signbit, copysign, flipsign, 
-    div, fld, rem, mod, inv
+    abs, abs2, real, imag, sqr, rcp,
+    sign, signbit, div, fld, rem, mod
     ```
 
 * rounding functions
@@ -90,15 +116,22 @@ In particular, the package defines functors for the following functions:
     ifloor, iceil, itrunc, iround
     ```
 
+* number classification functions
+
+    ```isnan, isinf, isfinite```
+
 * algebraic functions
 
-    ```sqrt, cbrt, hypot```
+    ```sqrt, rsqrt, cbrt, rcbrt, hypot```
 
 * exponential & logarithm
 
     ```
     exp, exp2, exp10, expm1, 
-    log, log2, log10, log1p
+    log, log2, log10, log1p,
+
+    sigmoid, logit, xlogx, xlogy, 
+    softplus, invsoftplus, logsumexp
     ```
 
 * trigonometric functions
