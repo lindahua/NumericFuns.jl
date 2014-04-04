@@ -14,7 +14,7 @@ using Base.Test
 @test xlogy(0, 1) === 0.0
 @test_approx_eq xlogy(2, 3) 2.0 * log(3.0)
 
-@test_approx_eq sigmoid(2) 1.0 / (1.0 + exp(-2.0))
+@test_approx_eq logistic(2) 1.0 / (1.0 + exp(-2.0))
 @test_approx_eq logit(0.5) 0.0
 @test_approx_eq logit(sigmoid(2)) 2.0
 

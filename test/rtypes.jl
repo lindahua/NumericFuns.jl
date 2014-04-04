@@ -177,7 +177,7 @@ for F in [ExpFun, Exp2Fun, Exp10Fun,
 end
 
 for F in [Expm1Fun, Log1pFun, XlogxFun, 
-          SigmoidFun, LogitFun, SoftplusFun, InvsoftplusFun]
+          LogisticFun, LogitFun, SoftplusFun, InvsoftplusFun]
     for T in realtypes
         check_rtype(F(), T)
     end

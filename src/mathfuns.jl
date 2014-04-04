@@ -13,8 +13,8 @@ xlogy{T<:FloatingPoint}(x::T, y::T) = x > zero(T) ? x * log(y) : zero(x)
 xlogy{T<:Real}(x::T, y::T) = xlogy(float(x), float(y))
 xlogy(x::Real, y::Real) = xlogy(promote(x, y)...)
 
-sigmoid(x::FloatingPoint) = rcp(one(x) + exp(-x))
-sigmoid(x::Real) = sigmoid(float(x))
+logistic(x::FloatingPoint) = rcp(one(x) + exp(-x))
+logistic(x::Real) = logistic(float(x))
 
 logit(x::FloatingPoint) = log(x / (one(x) - x))
 logit(x::Real) = logit(float(x))
@@ -36,8 +36,9 @@ logsumexp(x::Real, y::Real) = logsumexp(promote(x, y)...)
 
 @vectorize_1arg Real xlogx
 @vectorize_2arg Real xlogy
-@vectorize_1arg Real sigmoid
+@vectorize_1arg Real logistic
 @vectorize_1arg Real logit
 @vectorize_1arg Real softplus
 @vectorize_1arg Real invsoftplus
 
+const sigmoid = logistic

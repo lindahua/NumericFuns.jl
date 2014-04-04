@@ -234,7 +234,7 @@ result_type{T<:Number}(::Union(ExpFun,Exp2Fun,Exp10Fun), ::Type{T}) = fptype(T)
 result_type{T<:Number}(::Union(LogFun,Log2Fun,Log10Fun), ::Type{T}) = fptype(T)
 result_type{T<:Real}(::Union(Expm1Fun,Log1pFun), ::Type{T}) = fptype(T)
 
-result_type{T<:Real}(::Union(XlogxFun,SigmoidFun,LogitFun,SoftplusFun,InvsoftplusFun), ::Type{T}) = fptype(T)
+result_type{T<:Real}(::Union(XlogxFun,LogisticFun,LogitFun,SoftplusFun,InvsoftplusFun), ::Type{T}) = fptype(T)
 result_type{T1<:Real,T2<:Real}(::XlogyFun, ::Type{T1}, ::Type{T2}) = fptype(promote_type(T1, T2))
 result_type{T1<:Real,T2<:Real}(::LogsumexpFun, ::Type{T1}, ::Type{T2}) = fptype(promote_type(T1, T2))
 

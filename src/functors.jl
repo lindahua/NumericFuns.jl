@@ -181,7 +181,7 @@ export RsqrtFun, RcbrtFun
 
 export ExpFun, Exp2Fun, Exp10Fun, Expm1Fun
 export LogFun, Log2Fun, Log10Fun, Log1pFun
-export XlogxFun, XlogyFun, SigmoidFun, LogitFun
+export XlogxFun, XlogyFun, LogisticFun, LogitFun
 export SoftplusFun, InvsoftplusFun, LogsumexpFun
 
 @functor1a exp   Number
@@ -196,7 +196,7 @@ export SoftplusFun, InvsoftplusFun, LogsumexpFun
 
 @functor1a xlogx Real
 @functor2a xlogy Real
-@functor1a sigmoid Real
+@functor1a logistic Real
 @functor1a logit Real
 @functor1a softplus Real
 @functor1a invsoftplus Real

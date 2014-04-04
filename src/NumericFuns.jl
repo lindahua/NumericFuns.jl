@@ -4,7 +4,7 @@ module NumericFuns
 
     # mathfuns
     sqr, rcp, rsqrt, rcbrt, xlogx, xlogy, 
-    sigmoid, logit, softplus, invsoftplus, logsumexp,
+    sigmoid, logistic, logit, softplus, invsoftplus, logsumexp,
 
     # functors (Note: export of specific functors are in functors.jl)
     Functor, UnaryFunctor, BinaryFunctor, TernaryFunctor, 
