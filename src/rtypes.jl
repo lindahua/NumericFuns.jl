@@ -92,7 +92,7 @@ result_type{T<:Real}(::Union(RealFun,ImagFun), ::Type{Complex{T}}) = T
 # sign & signbit
 
 result_type{T<:Real}(::SignFun, ::Type{T}) = T
-result_type{T<:Real}(::SignbitFun, ::Type{T}) = Int
+result_type{T<:Real}(::SignbitFun, ::Type{T}) = Bool
 
 # add & subtract
 
