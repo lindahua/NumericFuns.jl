@@ -47,7 +47,8 @@ arithtype{T<:Integer}(::Type{Complex{T}}) = Complex{arithtype(T)}
 
 ## arithtype (binary)
 
-arithtype{T<:Real}(::Type{T},::Type{T}) = arithtype(T)
+# Disabled due to https://github.com/JuliaLang/julia/issues/9232
+# arithtype{T<:Real}(::Type{T},::Type{T}) = arithtype(T)
 arithtype{T1<:Real,T2<:Real}(::Type{T1}, ::Type{T2}) = arithtype(promote_type(T1, T2))
 arithtype{T1<:Real,T2<:Real}(::Type{T1}, ::Type{Complex{T2}}) = Complex{arithtype(T1,T2)}
 arithtype{T1<:Real,T2<:Real}(::Type{Complex{T1}}, ::Type{T2}) = Complex{arithtype(T1,T2)}
