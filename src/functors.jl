@@ -13,7 +13,7 @@ typealias TernaryFunctor Functor{3}
 ## macros for defining functors
 
 macro functor1(F, fun, T)
-    quote 
+    quote
         type $F <: Functor{1} end
         global evaluate
         evaluate(::$F, x::$T) = $(fun)(x)
@@ -21,14 +21,14 @@ macro functor1(F, fun, T)
 end
 
 macro functor2(F, fun, T)
-    quote 
+    quote
         type $F <: Functor{2} end
         global evaluate
         evaluate(::$F, x::$T, y::$T) = $(fun)(x, y)
     end
 end
 
-default_functorsym(f::Symbol) = 
+default_functorsym(f::Symbol) =
     (fstr = string(f); symbol(string(uppercase(fstr[1]), fstr[2:end], "Fun")))
 
 macro functor1a(fun, T)
@@ -53,7 +53,7 @@ macro functor1a_ord(fun, T)
     F = default_functorsym(fun)
     quote
         global $(F)
-        immutable $F{OT<:Real} <: Functor{1} 
+        immutable $F{OT<:Real} <: Functor{1}
             order::OT
         end
         $(F){OT<:Real}(ord::OT) = $(F){OT}(ord)
@@ -151,10 +151,15 @@ export IfloorFun, IceilFun, ItruncFun, IroundFun
 @functor1a trunc Real
 @functor1a round Real
 
-@functor1a ifloor Real
-@functor1a iceil  Real
-@functor1a itrunc Real
-@functor1a iround Real
+_ifloor(x) = floor(Integer, x)
+_iceil(x) = ceil(Integer, x)
+_itrunc(x) = trunc(Integer, x)
+_iround(x) = round(Integer, x)
+
+@functor1 IfloorFun _ifloor Real
+@functor1 IceilFun  _iceil  Real
+@functor1 ItruncFun _itrunc Real
+@functor1 IroundFun _iround Real
 
 ## number classification
 
@@ -298,10 +303,10 @@ export Hankelh1Fun, Hankelh2Fun
 @functor1a airybi Number
 @functor1a airybiprime Number
 
-@functor1a besselj0 Number 
-@functor1a besselj1 Number 
-@functor1a bessely0 Number 
-@functor1a bessely1 Number 
+@functor1a besselj0 Number
+@functor1a besselj1 Number
+@functor1a bessely0 Number
+@functor1a bessely1 Number
 
 @functor1a_ord besseli Number
 @functor1a_ord besselj Number
@@ -311,11 +316,11 @@ export Hankelh1Fun, Hankelh2Fun
 @functor1a_ord hankelh1 Number
 @functor1a_ord hankelh2 Number
 
-####################################### 
+#######################################
 #
 #  Ternary functors
 #
-####################################### 
+#######################################
 
 export FMA, IfelseFun
 
@@ -324,7 +329,3 @@ evaluate(::FMA, x::Number, y::Number, z::Number) = (x + y * z)
 
 type IfelseFun <: Functor{3} end
 evaluate{T<:Number}(::IfelseFun, c::Bool, x::T, y::T) = ifelse(c, x, y)
-
-
-
-

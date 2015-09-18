@@ -1,5 +1,6 @@
 using NumericFuns
 using Base.Test
+using Compat
 
 ## auxiliary function
 
@@ -22,26 +23,26 @@ end
 
 ## type categories
 
-const inttypes = [Int8, 
-                  Int16, 
-                  Int32, 
-                  Int64, 
-                  Int128, 
-                  Uint8, 
-                  Uint16,
-                  Uint32, 
-                  Uint64, 
-                  Uint128]
+const inttypes = [Int8,
+                  Int16,
+                  Int32,
+                  Int64,
+                  Int128,
+                  UInt8,
+                  UInt16,
+                  UInt32,
+                  UInt64,
+                  UInt128]
 
 const integraltypes = [Bool, inttypes...]
 const fptypes = [Float32, Float64]
 const realtypes = [integraltypes..., fptypes...]
 
 const complextypes = [Complex{Bool},
-                      Complex{Int16}, 
-                      Complex{Int32}, 
-                      Complex{Int64}, 
-                      Complex64, 
+                      Complex{Int16},
+                      Complex{Int32},
+                      Complex{Int64},
+                      Complex64,
                       Complex128]
 
 const numerictypes_r = [realtypes..., Complex64, Complex128]
@@ -52,7 +53,7 @@ const numerictypes = [realtypes..., complextypes...]
 println("    fptype")
 
 for t in realtypes
-    ft = typeof(convert(FloatingPoint, zero(t)))
+    ft = typeof(convert(AbstractFloat, zero(t)))
     @test fptype(t) == ft
 end
 
@@ -66,7 +67,7 @@ println("    arithmetics (unary)")
 
 for F in [Negate, AbsFun, Abs2Fun, RealFun, ImagFun, SqrFun, RcpFun]
     for T in numerictypes
-        check_rtype(F(), T) 
+        check_rtype(F(), T)
     end
 end
 
@@ -244,7 +245,7 @@ println("    beta & lbeta")
 for F in [BetaFun, LbetaFun]
     for T1 in realtypes, T2 in realtypes
         check_rtype(F(), T1, T2)
-    end    
+    end
 end
 
 println("    airy & friends")
@@ -262,4 +263,3 @@ for F in [Besselj0Fun, Besselj1Fun, Bessely0Fun, Bessely1Fun]
         check_rtype(F(), T)
     end
 end
-

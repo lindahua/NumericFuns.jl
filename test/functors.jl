@@ -1,16 +1,16 @@
 using NumericFuns
 using Base.Test
-
+using Compat
 
 println("    arithmetic operators")
 
 @test evaluate(Negate(), 2) == -2
 
-for (F, sf) in [(Add, +), 
-                (Subtract, -), 
-                (Multiply, *), 
-                (Divide, /), 
-                (RDivide, \), 
+for (F, sf) in [(Add, +),
+                (Subtract, -),
+                (Multiply, *),
+                (Divide, /),
+                (RDivide, \),
                 (Pow, ^)]
 
     @test evaluate(F(), 6, 2) == sf(6, 2)
@@ -19,10 +19,10 @@ end
 
 println("    comparison operators")
 
-for (F, sf) in [(LT, <), 
+for (F, sf) in [(LT, <),
                 (GT, >),
-                (LE, <=), 
-                (GE, >=), 
+                (LE, <=),
+                (GE, >=),
                 (EQ, ==),
                 (NE, !=)]
 
@@ -90,14 +90,14 @@ end
 
 println("    rounding functions")
 
-for (F, sf) in [(FloorFun, floor), 
-                (CeilFun, ceil), 
-                (TruncFun, trunc), 
-                (RoundFun, round), 
-                (IfloorFun, ifloor), 
-                (IceilFun, iceil), 
-                (ItruncFun, itrunc), 
-                (IroundFun, iround)]
+for (F, sf) in [(FloorFun, floor),
+                (CeilFun, ceil),
+                (TruncFun, trunc),
+                (RoundFun, round),
+                (IfloorFun, x->floor(Integer, x)),
+                (IceilFun, x->ceil(Integer, x)),
+                (ItruncFun, x->trunc(Integer, x)),
+                (IroundFun, x->round(Integer, x))]
 
     @test evaluate(F(),  3.4) === sf(3.4)
     @test evaluate(F(),  3.8) === sf(3.8)

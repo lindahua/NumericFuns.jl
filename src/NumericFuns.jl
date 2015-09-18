@@ -1,13 +1,15 @@
 module NumericFuns
 
-    export 
+    using Compat
+
+    export
 
     # mathfuns
-    sqr, rcp, rsqrt, rcbrt, xlogx, xlogy, 
+    sqr, rcp, rsqrt, rcbrt, xlogx, xlogy,
     sigmoid, logistic, logit, softplus, invsoftplus, logsumexp,
 
     # functors (Note: export of specific functors are in functors.jl)
-    Functor, UnaryFunctor, BinaryFunctor, TernaryFunctor, 
+    Functor, UnaryFunctor, BinaryFunctor, TernaryFunctor,
     evaluate, @functor1, @functor2,
 
     # rtypes
@@ -19,6 +21,5 @@ module NumericFuns
     include("mathfuns.jl")
     include("functors.jl")
     include("rtypes.jl")
-    
 
 end # module
