@@ -103,7 +103,7 @@ for F in [LT, GT, LE, GE, EQ, NE]
     println("        $F")
     for T1 in realtypes, T2 in realtypes
         check_rtype(F(), T1, T2)
-    end  
+    end
 end
 
 
@@ -207,7 +207,7 @@ end
 
 println("    hyperbolic functions")
 
-for F in [SinhFun, CoshFun, TanhFun, CothFun, SechFun, CschFun, 
+for F in [SinhFun, CoshFun, TanhFun, CothFun, SechFun, CschFun,
           AsinhFun, AcoshFun, AtanhFun, AcothFun, AsechFun, AcschFun]
     for T in numerictypes_r
         check_rtype(F(), T)

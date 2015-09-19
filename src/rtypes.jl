@@ -8,7 +8,7 @@
 
 ## fptype
 
-@compat fptype{T<:Union{Bool,Int8,Int16,UInt8,UInt16}}(::Type{T}) = Float32
+# @compat fptype{T<:Union{Bool,Int8,Int16,UInt8,UInt16}}(::Type{T}) = Float32
 fptype{T<:Integer}(::Type{T}) = Float64
 fptype{T<:AbstractFloat}(::Type{T}) = T
 
@@ -33,9 +33,13 @@ unsignedtype(::Type{Int128}) = UInt128
 
 ## arithtype (unary)
 
+if VERSION >= v"0.4-dev"
+    arithtype{T<:Union{Signed,Unsigned}}(::Type{T}) = T
+else
+    arithtype{T<:Signed}(::Type{T}) = Int64
+    arithtype{T<:Unsigned}(::Type{T}) = UInt64
+end
 arithtype(::Type{Bool}) = Int64
-arithtype{T<:Signed}(::Type{T}) = Int64
-arithtype{T<:Unsigned}(::Type{T}) = UInt64
 arithtype(::Type{Int128}) = Int128
 arithtype(::Type{UInt128}) = UInt128
 
@@ -124,8 +128,14 @@ result_type{T1<:Real,T2<:Complex}(op::Divide, ::Type{T1}, ::Type{T2}) =
 result_type{T1<:Real,T2<:Real}(op::Divide, ::Type{Complex{T1}}, ::Type{T2}) =
     Complex{result_type(op, T1, T2)}
 
-result_type{T1<:Complex,T2<:Complex}(op::Divide, ::Type{T1}, ::Type{T2}) =
-    result_type(Multiply(), T1, fptype(T2))
+if VERSION >= v"0.4-dev"
+    result_type{T1<:Real,T2<:Real}(op::Divide, ::Type{Complex{T1}},
+                                   ::Type{Complex{T2}}) =
+        Complex{result_type(op, T1, T2)}
+else
+    result_type{T1<:Complex,T2<:Complex}(op::Divide, ::Type{T1}, ::Type{T2}) =
+        result_type(Multiply(), T1, fptype(T2))
+end
 
 # rdivide
 
@@ -168,23 +178,33 @@ result_type{T<:Real, Tx<:Real}(::FixAbsPow{T}, ::Type{Tx}) = result_type(Pow(), 
 
 @compat result_type{T1<:Real,T2<:Real}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
 
-@compat result_type{T1<:Signed,T2<:Unsigned}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
-    signedtype(promote_type(T1, T2))
-@compat result_type{T1<:Unsigned,T2<:Signed}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
-    unsignedtype(promote_type(T1, T2))
+if VERSION >= v"0.4-dev"
+    @compat result_type{T1<:Signed,T2<:Unsigned}(op::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
+        signedtype(result_type(op, unsignedtype(T1), T2))
+    @compat result_type{T1<:Unsigned,T2<:Signed}(op::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
+        result_type(op, T1, unsignedtype(T2))
+else
+    @compat result_type{T1<:Signed,T2<:Unsigned}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
+        signedtype(promote_type(T1, T2))
+    @compat result_type{T1<:Unsigned,T2<:Signed}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
+        unsignedtype(promote_type(T1, T2))
+end
 
 result_type{T1<:Real,T2<:Real}(::FldFun, ::Type{T1}, ::Type{T2}) =
     arithtype(T1, T2)
 @compat result_type{T1<:Union{Unsigned,Bool}, T2<:Union{Unsigned,Bool}}(::FldFun, ::Type{T1}, ::Type{T2}) =
     promote_type(T1, T2)
+
 result_type{T1<:Signed,T2<:Unsigned}(::FldFun, ::Type{T1}, ::Type{T2}) =
-    signedtype(promote_type(T1, T2))
+    result_type(DivFun(), T1, T2)
 result_type{T1<:Unsigned,T2<:Signed}(::FldFun, ::Type{T1}, ::Type{T2}) =
-    unsignedtype(promote_type(T1, T2))
+    result_type(DivFun(), T1, T2)
 
 result_type{T1<:Real,T2<:Real}(::ModFun, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
-result_type{T1<:Signed,T2<:Unsigned}(::ModFun, ::Type{T1}, ::Type{T2}) = unsignedtype(promote_type(T1, T2))
-result_type{T1<:Unsigned,T2<:Signed}(::ModFun, ::Type{T1}, ::Type{T2}) = signedtype(promote_type(T1, T2))
+result_type{T1<:Signed,T2<:Unsigned}(::ModFun, ::Type{T1}, ::Type{T2}) =
+    unsignedtype(result_type(DivFun(), T1, T2))
+result_type{T1<:Unsigned,T2<:Signed}(::ModFun, ::Type{T1}, ::Type{T2}) =
+    signedtype(result_type(DivFun(), T1, T2))
 
 # fma
 
@@ -247,8 +267,10 @@ result_type{T1<:Real,T2<:Real}(::LogsumexpFun, ::Type{T1}, ::Type{T2}) = fptype(
 @compat result_type{T<:Number}(::Union{AsindFun,AcosdFun,AtandFun,AcotdFun,AsecdFun,AcscdFun}, ::Type{T}) = fptype(T)
 
 result_type{T<:Integer}(::SincFun, ::Type{T}) = T
-result_type{T<:Integer}(::SinpiFun, ::Type{T}) = T
-result_type{T<:Integer}(::CospiFun, ::Type{T}) = arithtype(T)
+if VERSION < v"0.4-dev"
+    result_type{T<:Integer}(::SinpiFun, ::Type{T}) = T
+    result_type{T<:Integer}(::CospiFun, ::Type{T}) = arithtype(T)
+end
 
 result_type{T1<:Real,T2<:Real}(::Atan2Fun, ::Type{T1}, ::Type{T2}) = promote_type(fptype(T1), fptype(T2))
 
