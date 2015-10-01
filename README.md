@@ -97,7 +97,7 @@ Here is a table of functor types for operators:
 
 #### Functors for math functions
 
-The package also defined functors for named functions. The naming of functor types follows the ``$(capitalize(funname))Fun`` rule. 
+The package also defined functors for named functions. The naming of functor types follows the ``$(capitalize(funname))Fun`` rule.
 For example, the functor type for ``sqrt`` is ``SqrtFun``, and that for ``lgamma`` is ``LgammaFun``, etc.
 
 In particular, the package defines functors for the following functions:
@@ -112,7 +112,7 @@ In particular, the package defines functors for the following functions:
 * rounding functions
 
     ```
-    floor, ceil, trunc, round, 
+    floor, ceil, trunc, round,
     ifloor, iceil, itrunc, iround
     ```
 
@@ -127,20 +127,20 @@ In particular, the package defines functors for the following functions:
 * exponential & logarithm
 
     ```
-    exp, exp2, exp10, expm1, 
+    exp, exp2, exp10, expm1,
     log, log2, log10, log1p,
 
-    sigmoid, logit, xlogx, xlogy, 
+    sigmoid, logit, xlogx, xlogy,
     softplus, invsoftplus, logsumexp
     ```
 
 * trigonometric functions
 
     ```
-    sin, cos, tan, cot, sec, csc, 
-    asin, acos, atan, acot, asec, acsc, atan2, 
-    sinc, cosc, sinpi, cospi, 
-    sind, cosd, tand, cotd, secd, cscd, 
+    sin, cos, tan, cot, sec, csc,
+    asin, acos, atan, acot, asec, acsc, atan2,
+    sinc, cosc, sinpi, cospi,
+    sind, cosd, tand, cotd, secd, cscd,
     asind, acosd, atand, acotd, asecd, acscd
     ```
 
@@ -165,7 +165,7 @@ In particular, the package defines functors for the following functions:
 
 ## Result Type Inference
 
-Each functor defined in this package comes with ``result_type`` methods that return the type of the result, given the argument types. These methods are thoroughly tested to ensure correctness. For example, 
+Each functor defined in this package comes with ``result_type`` methods that return the type of the result, given the argument types. These methods are thoroughly tested to ensure correctness. For example,
 
 ```julia
 result_type(Add(), Int, Float64)  # --> returns Float64
@@ -175,11 +175,10 @@ result_type(SqrtFun(), Int)   # --> returns Float64
 The package also provides other convenient methods for type inference, which include ``fptype`` and ``arithtype``. Particularly, we have
 
 ```julia
-fptype{T<:Real}(::Type{T}) == typeof(Convert(FloatingPoint, one(T)))
+fptype{T<:Real}(::Type{T}) == typeof(Convert(AbstractFloat, one(T)))
 fptype{T<:Real}(::Type{Complex{T}}) == Complex{fptype(T)}
 
 arithtype{T1<:Number, T2<:Number} == typeof(one(T1) + one(T2))
 ```
 
 The internal implementation of these functions are very efficient, usually without actually evaluating the expressions.
-
