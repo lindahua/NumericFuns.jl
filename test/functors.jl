@@ -2,6 +2,15 @@ using NumericFuns
 using Base.Test
 using Compat
 
+println("    macros")
+test_unary(x) = -x
+test_binary(x, y) = x + y
+@functor1(TestUnary, test_unary, Number)
+@functor2(TestBinary, test_binary, Number)
+
+@test evaluate(TestUnary(), 3) == -3
+@test evaluate(TestBinary(), 3, 4) == 7
+
 println("    arithmetic operators")
 
 @test evaluate(Negate(), 2) == -2
