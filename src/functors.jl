@@ -12,19 +12,27 @@ typealias TernaryFunctor Functor{3}
 
 ## macros for defining functors
 
+# On 0.4 we can do `function evaluate end` (althought it's probably better)
+# to use the call overload when we require julia 0.4
+function evaluate() end
+
 macro functor1(F, fun, T)
+    eF = esc(F)
+    efun = esc(fun)
+    eT = esc(T)
     quote
-        type $F <: Functor{1} end
-        global evaluate
-        evaluate(::$F, x::$T) = $(fun)(x)
+        type $eF <: Functor{1} end
+        NumericFuns.evaluate(::$eF, x::$eT) = $efun(x)
     end
 end
 
 macro functor2(F, fun, T)
+    eF = esc(F)
+    efun = esc(fun)
+    eT = esc(T)
     quote
-        type $F <: Functor{2} end
-        global evaluate
-        evaluate(::$F, x::$T, y::$T) = $(fun)(x, y)
+        type $eF <: Functor{2} end
+        NumericFuns.evaluate(::$eF, x::$eT, y::$eT) = $efun(x, y)
     end
 end
 
@@ -33,32 +41,37 @@ default_functorsym(f::Symbol) =
 
 macro functor1a(fun, T)
     F = default_functorsym(fun)
+    eF = esc(F)
+    efun = esc(fun)
+    eT = esc(T)
     quote
-        type $F <: Functor{1} end
-        global evaluate
-        evaluate(::$F, x::$T) = $(fun)(x)
+        type $eF <: Functor{1} end
+        NumericFuns.evaluate(::$eF, x::$eT) = $efun(x)
     end
 end
 
 macro functor2a(fun, T)
     F = default_functorsym(fun)
+    eF = esc(F)
+    efun = esc(fun)
+    eT = esc(T)
     quote
-        type $F <: Functor{2} end
-        global evaluate
-        evaluate(::$F, x::$T, y::$T) = $(fun)(x, y)
+        type $eF <: Functor{2} end
+        NumericFuns.evaluate(::$eF, x::$eT, y::$eT) = $efun(x, y)
     end
 end
 
 macro functor1a_ord(fun, T)
     F = default_functorsym(fun)
+    eF = esc(F)
+    efun = esc(fun)
+    eT = esc(T)
     quote
-        global $(F)
-        immutable $F{OT<:Real} <: Functor{1}
+        immutable $eF{OT<:Real} <: Functor{1}
             order::OT
         end
-        $(F){OT<:Real}(ord::OT) = $(F){OT}(ord)
-        global evaluate
-        evaluate(f::$F, x::$T) = $(fun)(f.order, x)
+        $eF{OT<:Real}(ord::OT) = $eF{OT}(ord)
+        NumericFuns.evaluate(f::$eF, x::$eT) = $efun(f.order, x)
     end
 end
 
