@@ -37,7 +37,7 @@ macro functor2(F, fun, T)
 end
 
 default_functorsym(f::Symbol) =
-    (fstr = string(f); symbol(string(uppercase(fstr[1]), fstr[2:end], "Fun")))
+    (fstr = string(f); Symbol(string(uppercase(fstr[1]), fstr[2:end], "Fun")))
 
 macro functor1a(fun, T)
     F = default_functorsym(fun)
