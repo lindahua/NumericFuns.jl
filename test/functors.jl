@@ -1,6 +1,6 @@
 using NumericFuns
 using Base.Test
-using Compat
+using SpecialFunctions
 
 println("    macros")
 test_unary(x) = -x
