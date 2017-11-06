@@ -9,6 +9,7 @@
 ## fptype
 
 # @compat fptype{T<:Union{Bool,Int8,Int16,UInt8,UInt16}}(::Type{T}) = Float32
+fptype(::Type{Bool}) = Float64
 fptype{T<:Integer}(::Type{T}) = Float64
 fptype{T<:AbstractFloat}(::Type{T}) = T
 
@@ -90,8 +91,8 @@ result_type{T<:Number}(::SqrFun, ::Type{T}) = arithtype(T)
 
 # real & imag
 
-@compat result_type{T<:Real}(::Union{RealFun,ImagFun}, ::Type{T}) = T
-@compat result_type{T<:Real}(::Union{RealFun,ImagFun}, ::Type{Complex{T}}) = T
+result_type{T<:Real}(::Union{RealFun,ImagFun}, ::Type{T}) = T
+result_type{T<:Real}(::Union{RealFun,ImagFun}, ::Type{Complex{T}}) = T
 
 # sign & signbit
 
@@ -100,7 +101,7 @@ result_type{T<:Real}(::SignbitFun, ::Type{T}) = Bool
 
 # add & subtract
 
-@compat result_type{T1<:Number,T2<:Number}(::Union{Add,Subtract}, ::Type{T1}, ::Type{T2}) = arithtype(T1, T2)
+result_type{T1<:Number,T2<:Number}(::Union{Add,Subtract}, ::Type{T1}, ::Type{T2}) = arithtype(T1, T2)
 
 # multiply
 
@@ -123,7 +124,7 @@ result_type{T1<:Integer,T2<:Integer}(::Divide, ::Type{T1}, ::Type{T2}) =
     promote_type(fptype(T1), fptype(T2))
 
 result_type{T1<:Real,T2<:Complex}(op::Divide, ::Type{T1}, ::Type{T2}) =
-    result_type(Multiply(), T1, fptype(T2))
+    fptype(result_type(Multiply(), T1, T2))
 
 result_type{T1<:Real,T2<:Real}(op::Divide, ::Type{Complex{T1}}, ::Type{T2}) =
     Complex{result_type(op, T1, T2)}
@@ -170,29 +171,22 @@ result_type{T<:Real, Tx<:Real}(::FixAbsPow{T}, ::Type{Tx}) = result_type(Pow(), 
 
 # max & min
 
-@compat result_type{T<:Real}(::Union{MaxFun,MinFun}, ::Type{T}, ::Type{T}) = T
-@compat result_type{T1<:Real,T2<:Real}(::Union{MaxFun,MinFun}, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
+result_type{T<:Real}(::Union{MaxFun,MinFun}, ::Type{T}, ::Type{T}) = T
+result_type{T1<:Real,T2<:Real}(::Union{MaxFun,MinFun}, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
 
 
 # quotient & module
 
-@compat result_type{T1<:Real,T2<:Real}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
+result_type{T1<:Real,T2<:Real}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) = promote_type(T1, T2)
 
-if VERSION >= v"0.4-dev"
-    @compat result_type{T1<:Signed,T2<:Unsigned}(op::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
-        signedtype(result_type(op, unsignedtype(T1), T2))
-    @compat result_type{T1<:Unsigned,T2<:Signed}(op::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
-        result_type(op, T1, unsignedtype(T2))
-else
-    @compat result_type{T1<:Signed,T2<:Unsigned}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
-        signedtype(promote_type(T1, T2))
-    @compat result_type{T1<:Unsigned,T2<:Signed}(::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
-        unsignedtype(promote_type(T1, T2))
-end
+result_type{T1<:Signed,T2<:Unsigned}(op::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
+    signedtype(result_type(op, unsignedtype(T1), T2))
+result_type{T1<:Unsigned,T2<:Signed}(op::Union{DivFun,RemFun}, ::Type{T1}, ::Type{T2}) =
+    result_type(op, T1, unsignedtype(T2))
 
 result_type{T1<:Real,T2<:Real}(::FldFun, ::Type{T1}, ::Type{T2}) =
     arithtype(T1, T2)
-@compat result_type{T1<:Union{Unsigned,Bool}, T2<:Union{Unsigned,Bool}}(::FldFun, ::Type{T1}, ::Type{T2}) =
+result_type{T1<:Union{Unsigned,Bool}, T2<:Union{Unsigned,Bool}}(::FldFun, ::Type{T1}, ::Type{T2}) =
     promote_type(T1, T2)
 
 result_type{T1<:Signed,T2<:Unsigned}(::FldFun, ::Type{T1}, ::Type{T2}) =
@@ -225,46 +219,46 @@ result_type(::Or, ::Type{Bool}, ::Type{Bool}) = Bool
 
 result_type{T<:Integer}(::BitwiseNot, ::Type{T}) = T
 
-@compat result_type{T1<:Integer,T2<:Integer}(::Union{BitwiseAnd,BitwiseOr,BitwiseXor}, ::Type{T1}, ::Type{T2}) =
+result_type{T1<:Integer,T2<:Integer}(::Union{BitwiseAnd,BitwiseOr,BitwiseXor}, ::Type{T1}, ::Type{T2}) =
     promote_type(T1, T2)
 
 # comparison
 
-@compat result_type{T1<:Real,T2<:Real}(::Union{LT,GT,LE,GE}, ::Type{T1}, ::Type{T2}) = Bool
-@compat result_type{T1<:Number,T2<:Number}(::Union{EQ,NE}, ::Type{T1}, ::Type{T2}) = Bool
+result_type{T1<:Real,T2<:Real}(::Union{LT,GT,LE,GE}, ::Type{T1}, ::Type{T2}) = Bool
+result_type{T1<:Number,T2<:Number}(::Union{EQ,NE}, ::Type{T1}, ::Type{T2}) = Bool
 
 # rounding
 
-@compat result_type{T<:Real}(::Union{FloorFun, CeilFun, TruncFun, RoundFun}, ::Type{T}) = T
-@compat result_type{T<:Integer}(::Union{IfloorFun, IceilFun, ItruncFun, IroundFun}, ::Type{T}) = T
-@compat result_type{T<:AbstractFloat}(::Union{IfloorFun, IceilFun, ItruncFun, IroundFun}, ::Type{T}) = Int64
+result_type{T<:Real}(::Union{FloorFun, CeilFun, TruncFun, RoundFun}, ::Type{T}) = T
+result_type{T<:Integer}(::Union{IfloorFun, IceilFun, ItruncFun, IroundFun}, ::Type{T}) = T
+result_type{T<:AbstractFloat}(::Union{IfloorFun, IceilFun, ItruncFun, IroundFun}, ::Type{T}) = Int64
 
 # number classification
 
-@compat result_type{T<:Real}(::Union{IsnanFun, IsinfFun, IsfiniteFun}, ::Type{T}) = Bool
+result_type{T<:Real}(::Union{IsnanFun, IsinfFun, IsfiniteFun}, ::Type{T}) = Bool
 
 # algebraic functions
 
-@compat result_type{T<:Number}(::Union{SqrtFun,CbrtFun,RsqrtFun,RcbrtFun}, ::Type{T}) = fptype(T)
-result_type{T1<:Real,T2<:Real}(::HypotFun, ::Type{T1}, ::Type{T2}) = promote_type(fptype(T1), fptype(T2))
+result_type{T<:Number}(::Union{SqrtFun,CbrtFun,RsqrtFun,RcbrtFun}, ::Type{T}) = fptype(T)
+result_type{T1<:Real,T2<:Real}(::HypotFun, ::Type{T1}, ::Type{T2}) = fptype(promote_type(T1, T2))
 
 # exponential & logarithm
 
-@compat result_type{T<:Number}(::Union{ExpFun,Exp2Fun,Exp10Fun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{LogFun,Log2Fun,Log10Fun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Real}(::Union{Expm1Fun,Log1pFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{ExpFun,Exp2Fun,Exp10Fun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{LogFun,Log2Fun,Log10Fun}, ::Type{T}) = fptype(T)
+result_type{T<:Real}(::Union{Expm1Fun,Log1pFun}, ::Type{T}) = fptype(T)
 
-@compat result_type{T<:Real}(::Union{XlogxFun,LogisticFun,LogitFun,SoftplusFun,InvsoftplusFun}, ::Type{T}) = fptype(T)
+result_type{T<:Real}(::Union{XlogxFun,LogisticFun,LogitFun,SoftplusFun,InvsoftplusFun}, ::Type{T}) = fptype(T)
 result_type{T1<:Real,T2<:Real}(::XlogyFun, ::Type{T1}, ::Type{T2}) = fptype(promote_type(T1, T2))
 result_type{T1<:Real,T2<:Real}(::LogsumexpFun, ::Type{T1}, ::Type{T2}) = fptype(promote_type(T1, T2))
 
 # trigonometric functions
 
-@compat result_type{T<:Number}(::Union{SinFun,CosFun,TanFun,CotFun,SecFun,CscFun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{AsinFun,AcosFun,AtanFun,AcotFun,AsecFun,AcscFun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{SincFun,CoscFun,SinpiFun,CospiFun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{SindFun,CosdFun,TandFun,CotdFun,SecdFun,CscdFun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{AsindFun,AcosdFun,AtandFun,AcotdFun,AsecdFun,AcscdFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{SinFun,CosFun,TanFun,CotFun,SecFun,CscFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{AsinFun,AcosFun,AtanFun,AcotFun,AsecFun,AcscFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{SincFun,CoscFun,SinpiFun,CospiFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{SindFun,CosdFun,TandFun,CotdFun,SecdFun,CscdFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{AsindFun,AcosdFun,AtandFun,AcotdFun,AsecdFun,AcscdFun}, ::Type{T}) = fptype(T)
 
 result_type{T<:Integer}(::SincFun, ::Type{T}) = T
 if VERSION < v"0.4-dev"
@@ -276,36 +270,35 @@ result_type{T1<:Real,T2<:Real}(::Atan2Fun, ::Type{T1}, ::Type{T2}) = promote_typ
 
 # hyperbolic functions
 
-@compat result_type{T<:Number}(::Union{SinhFun,CoshFun,TanhFun,CothFun,SechFun,CschFun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{AsinhFun,AcoshFun,AtanhFun,AcothFun,AsechFun,AcschFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{SinhFun,CoshFun,TanhFun,CothFun,SechFun,CschFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{AsinhFun,AcoshFun,AtanhFun,AcothFun,AsechFun,AcschFun}, ::Type{T}) = fptype(T)
 
 # erf & friends
 
-@compat result_type{T<:Number}(::Union{ErfFun,ErfcFun,ErfiFun,ErfcxFun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{ErfinvFun,ErfcinvFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{ErfFun,ErfcFun,ErfiFun,ErfcxFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{ErfinvFun,ErfcinvFun}, ::Type{T}) = fptype(T)
 
 # gamma, beta, & friends
 
-@compat result_type{T<:Number}(::Union{GammaFun,LgammaFun,EtaFun,ZetaFun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Integer}(::Union{EtaFun,ZetaFun}, ::Type{T}) = Float64
-
-@compat result_type(::Union{GammaFun,LgammaFun}, ::Type{Complex64}) = Complex128
+result_type{T<:Number}(::Union{GammaFun,LgammaFun,EtaFun,ZetaFun}, ::Type{T}) = fptype(T)
+result_type{T<:Integer}(::Union{EtaFun,ZetaFun}, ::Type{T}) = Float64
 
 result_type{T<:AbstractFloat}(::DigammaFun, ::Type{T}) = T
 result_type{T<:Integer}(::DigammaFun, ::Type{T}) = Float64
 
-@compat result_type{T1<:Real,T2<:Real}(::Union{BetaFun,LbetaFun}, ::Type{T1}, ::Type{T2}) =
+result_type{T1<:Real,T2<:Real}(::Union{BetaFun,LbetaFun}, ::Type{T1}, ::Type{T2}) =
     promote_type(fptype(T1),fptype(T2))
 
-@compat result_type{T1<:Integer,T2<:Integer}(::Union{BetaFun,LbetaFun}, ::Type{T1}, ::Type{T2}) = Float64
+result_type{T1<:Integer,T2<:Integer}(::Union{BetaFun,LbetaFun}, ::Type{T1}, ::Type{T2}) = Float64
 
 # airy & friends
 
-@compat result_type{T<:Number}(::Union{AiryFun,AiryprimeFun,AiryaiFun,AiryaiprimeFun,AirybiFun,AirybiprimeFun},::Type{T}) =
+result_type{T<:Number}(::Union{AiryaiFun,AiryaiprimeFun,AirybiFun,AirybiprimeFun},::Type{T}) =
     fptype(T)
 
 # bessel & friends
 
-@compat result_type{T<:Number}(::Union{Besselj0Fun, Besselj1Fun, Bessely0Fun, Bessely1Fun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{BesseliFun, BesseljFun, BesselkFun, BesselyFun}, ::Type{T}) = fptype(T)
-@compat result_type{T<:Number}(::Union{Hankelh1Fun, Hankelh2Fun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{Besselj0Fun, Besselj1Fun, Bessely0Fun, Bessely1Fun}, ::Type{T}) = fptype(T)
+result_type(::Union{Besselj0Fun, Besselj1Fun, Bessely0Fun, Bessely1Fun}, ::Type{Complex64}) = Complex128
+result_type{T<:Number}(::Union{BesseliFun, BesseljFun, BesselkFun, BesselyFun}, ::Type{T}) = fptype(T)
+result_type{T<:Number}(::Union{Hankelh1Fun, Hankelh2Fun}, ::Type{T}) = fptype(T)

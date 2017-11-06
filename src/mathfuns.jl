@@ -29,16 +29,4 @@ logsumexp{T<:AbstractFloat}(x::T, y::T) = x > y ? x + log1p(exp(y - x)) : y + lo
 logsumexp{T<:Real}(x::T, y::T) = logsumexp(float(x), float(y))
 logsumexp(x::Real, y::Real) = logsumexp(promote(x, y)...)
 
-@vectorize_1arg Number sqr
-@vectorize_1arg Number rcp
-@vectorize_1arg Real rsqrt
-@vectorize_1arg Real rcbrt
-
-@vectorize_1arg Real xlogx
-@vectorize_2arg Real xlogy
-@vectorize_1arg Real logistic
-@vectorize_1arg Real logit
-@vectorize_1arg Real softplus
-@vectorize_1arg Real invsoftplus
-
 const sigmoid = logistic
