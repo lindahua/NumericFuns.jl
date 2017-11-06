@@ -1,6 +1,6 @@
 using NumericFuns
 using Base.Test
-using Compat
+using SpecialFunctions
 
 println("    macros")
 test_unary(x) = -x
@@ -61,7 +61,7 @@ println("    bitwise operators")
 
 for (F, sf) in [(BitwiseAnd, &), 
                 (BitwiseOr,  |), 
-                (BitwiseXor, $)]
+                (BitwiseXor, ⊻)]
 
     @test evaluate(F(), 5, 9) == sf(5, 9)
 end
@@ -150,7 +150,7 @@ println("    special functions")
 
 for (Fun, sf) in [(ErfFun(), erf), 
                   (GammaFun(), gamma), 
-                  (AiryFun(), airy), 
+                  (AiryaiFun(), airyai), 
                   (Besselj0Fun(), besselj0),            
                   (BesseljFun(2), x -> besselj(2, x))]
 

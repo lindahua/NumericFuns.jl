@@ -38,7 +38,7 @@ Note that the *equivalent expressions* above are just for the purpose to conveyi
 
 *Functors* are typed instances used in indicate a particular function. Since Julia is not able to specialize on functions (yet), functors provide an effective way that allow mutliple dispatch and functional programming to work together.
 
-The package defines an abstract type ``Functor`` as 
+The package defines an abstract type ``Functor`` as
 
 ```julia
 abstract Functor{N}

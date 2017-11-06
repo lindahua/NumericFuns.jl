@@ -4,11 +4,13 @@
 #
 #################################################
 
-abstract Functor{N}  # N is the number of arguments
+using SpecialFunctions # erf
 
-typealias UnaryFunctor Functor{1}
-typealias BinaryFunctor Functor{2}
-typealias TernaryFunctor Functor{3}
+abstract type Functor{N} end  # N is the number of arguments
+
+const UnaryFunctor = Functor{1}
+const BinaryFunctor = Functor{2}
+const TernaryFunctor = Functor{3}
 
 ## macros for defining functors
 
@@ -37,7 +39,7 @@ macro functor2(F, fun, T)
 end
 
 default_functorsym(f::Symbol) =
-    (fstr = string(f); symbol(string(uppercase(fstr[1]), fstr[2:end], "Fun")))
+    (fstr = string(f); Symbol(string(uppercase(fstr[1]), fstr[2:end], "Fun")))
 
 macro functor1a(fun, T)
     F = default_functorsym(fun)
@@ -70,7 +72,6 @@ macro functor1a_ord(fun, T)
         immutable $eF{OT<:Real} <: Functor{1}
             order::OT
         end
-        $eF{OT<:Real}(ord::OT) = $eF{OT}(ord)
         NumericFuns.evaluate(f::$eF, x::$eT) = $efun(f.order, x)
     end
 end
@@ -128,7 +129,7 @@ export BitwiseNot, BitwiseAnd, BitwiseOr, BitwiseXor
 @functor1(BitwiseNot, ~, Integer)
 @functor2(BitwiseAnd, &, Integer)
 @functor2(BitwiseOr,  |, Integer)
-@functor2(BitwiseXor, $, Integer)
+@functor2(BitwiseXor, ⊻, Integer)
 
 ## arithmetic functions
 
@@ -285,7 +286,7 @@ export AsinhFun, AcoshFun, AtanhFun, AcothFun, AsechFun, AcschFun
 
 export ErfFun, ErfcFun, ErfinvFun, ErfcinvFun, ErfiFun, ErfcxFun
 export GammaFun, LgammaFun, DigammaFun, EtaFun, ZetaFun, BetaFun, LbetaFun
-export AiryFun, AiryprimeFun, AiryaiFun, AiryaiprimeFun, AirybiFun, AirybiprimeFun
+export AiryaiFun, AiryaiprimeFun, AirybiFun, AirybiprimeFun
 
 export Besselj0Fun, Besselj1Fun, Bessely0Fun, Bessely1Fun
 export BesseliFun, BesseljFun, BesselkFun, BesselyFun
@@ -309,8 +310,6 @@ export Hankelh1Fun, Hankelh2Fun
 @functor2a beta Real
 @functor2a lbeta Real
 
-@functor1a airy Number
-@functor1a airyprime Number
 @functor1a airyai Number
 @functor1a airyaiprime Number
 @functor1a airybi Number

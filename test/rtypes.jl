@@ -250,7 +250,7 @@ end
 
 println("    airy & friends")
 
-for F in [AiryFun,AiryprimeFun,AiryaiFun,AiryaiprimeFun,AirybiFun,AirybiprimeFun]
+for F in [AiryaiFun,AiryaiprimeFun,AirybiFun,AirybiprimeFun]
     for T in numerictypes_r
         check_rtype(F(), T)
     end

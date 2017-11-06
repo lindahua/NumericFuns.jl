@@ -1,7 +1,5 @@
 module NumericFuns
 
-    using Compat
-
     export
 
     # mathfuns
